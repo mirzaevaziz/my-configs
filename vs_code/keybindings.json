@@ -1,0 +1,235 @@
+// Place your key bindings in this file to override the defaults.
+[
+  // General Editing
+  {
+    "key": "shift+cmd+d",
+    "command": "editor.action.duplicateSelection",
+  },
+  {
+    "key": "ctrl+shift+p",
+    "command": "editor.action.triggerParameterHints",
+    "when": "editorHasSignatureHelpProvider && editorTextFocus",
+  },
+  {
+    "key": "shift+cmd+space",
+    "command": "-editor.action.triggerParameterHints",
+    "when": "editorHasSignatureHelpProvider && editorTextFocus",
+  },
+
+  // Save / File Behavior Overrides
+  {
+    "key": "shift+cmd+s",
+    "command": "-workbench.action.files.saveAs",
+  },
+  {
+    "key": "shift+cmd+s",
+    "command": "-workbench.action.files.saveLocalFile",
+    "when": "remoteFileDialogVisible",
+  },
+
+  // Editor Navigation and Layout
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.nextEditor",
+    "when": "!terminalFocus || terminalEditorFocus",
+  },
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.previousEditor",
+    "when": "!terminalFocus || terminalEditorFocus",
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "-editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly",
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "workbench.action.moveEditorToNextGroup",
+    "when": "",
+  },
+  {
+    "key": "cmd+shift+j",
+    "command": "workbench.action.moveEditorToPreviousGroup",
+    "when": "",
+  },
+  {
+    "key": "cmd+ctrl+j",
+    "command": "moveActiveEditor",
+    "args": {
+      "to": "left",
+    },
+  },
+  {
+    "key": "cmd+ctrl+k",
+    "command": "moveActiveEditor",
+    "args": {
+      "to": "right",
+    },
+  },
+
+  // Suggest Widget and Quick Open Traversal
+  {
+    "key": "cmd+j",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus",
+  },
+  {
+    "key": "cmd+k",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus",
+  },
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen",
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen",
+  },
+
+  // List Navigation (Vim-style)
+  {
+    "key": "j",
+    "command": "list.focusDown",
+    "when": "listFocus && !inputFocus",
+  },
+  {
+    "key": "k",
+    "command": "list.focusUp",
+    "when": "listFocus && !inputFocus",
+  },
+
+  // Terminal Management and Focus
+  {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "when": "terminalFocus",
+    "args": {
+      "text": "\u001b\r",
+    },
+  },
+  {
+    "key": "cmd+enter",
+    "command": "workbench.action.terminal.toggleTerminal",
+  },
+  {
+    "key": "cmd+ctrl+enter",
+    "command": "workbench.action.toggleMaximizedPanel",
+  },
+  {
+    "key": "shift+cmd+enter",
+    "command": "workbench.action.createTerminalEditor",
+  },
+  {
+    "key": "cmd+d",
+    "command": "workbench.action.terminal.newInActiveWorkspace",
+    "when": "terminalFocus && terminalProcessSupported",
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.terminal.focusNext",
+    "when": "terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.terminal.focusPrevious",
+    "when": "terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "alt+cmd+down",
+    "command": "-workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && terminalProcessSupported",
+  },
+  {
+    "key": "alt+cmd+up",
+    "command": "-workbench.action.terminal.focusPreviousPane",
+    "when": "terminalFocus && terminalProcessSupported",
+  },
+  {
+    "key": "cmd+]",
+    "command": "workbench.action.terminal.focusNext",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "shift+cmd+]",
+    "command": "-workbench.action.terminal.focusNext",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "cmd+[",
+    "command": "workbench.action.terminal.focusPrevious",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "shift+cmd+[",
+    "command": "-workbench.action.terminal.focusPrevious",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus",
+  },
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.terminal.kill",
+    "when": "terminalFocus",
+  },
+  {
+    "key": "cmd+w",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "terminalEditorFocus || activeEditorId == 'workbench.editor.terminal'",
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus",
+  },
+  {
+    "key": "ctrl+shift+alt+w",
+    "command": "workbench.action.closePanel",
+  },
+
+  // Explorer and Source Control Views
+  {
+    "key": "cmd+e",
+    "command": "workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled",
+  },
+  {
+    "key": "shift+cmd+e",
+    "command": "-workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled",
+  },
+  {
+    "key": "cmd+m",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active",
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active",
+  },
+
+  // Testing Shortcuts
+  // Override pair: old debug key -> rerun last test
+  {
+    "key": "cmd+; cmd+l",
+    "command": "-testing.debugLastRun",
+  },
+  {
+    "key": "cmd+; cmd+l",
+    "command": "testing.reRunLastRun",
+  },
+  // Standalone disable: remove alternate rerun binding
+  {
+    "key": "cmd+; l",
+    "command": "-testing.reRunLastRun",
+  },
+
+  // Chat / Copilot Overrides
+  {
+    "key": "shift+alt+cmd+l",
+    "command": "-workbench.action.quickchat.toggle",
+    "when": "chatIsEnabled",
+  },
+]

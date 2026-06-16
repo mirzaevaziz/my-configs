@@ -18,7 +18,7 @@ _Avoid_: Project, package, folder
 A branch present in a repo's local git state (`git branch`). The unit `/cleanup-branches` operates on.
 
 **Server branch**:
-A branch known to exist on the remote, discovered by querying the forge API (`gh` for GitHub, `glab` for GitLab) — not by `git fetch` or `git branch -r`, which the skill never runs.
+The same-named branch on the `origin` remote of a repo. Never enumerated or queried — the skill blindly attempts `git push origin --delete <branch>` as a side-effect of local deletion and tolerates the "remote ref does not exist" failure.
 _Avoid_: Remote branch, origin branch
 
 **Protected branch**:

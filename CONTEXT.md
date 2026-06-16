@@ -23,3 +23,19 @@ _Avoid_: Remote branch, origin branch
 
 **Protected branch**:
 A branch the skill refuses to touch: `main`, `master`, `develop`, and the branch currently checked out in each repo.
+
+### Branch creation
+
+**Naming template**:
+A string with `{placeholder}` slots that resolves to a concrete branch name. Lives per-repo in `git config branch.naming.template`. Known placeholders: `{type}`, `{week}`, `{year}`, `{work_item}`, `{desc}`. Resolved at branch-creation time using global user inputs and auto-computed values.
+_Avoid_: Pattern, format, scheme
+
+**Default template**:
+The fallback used when a repo has no `branch.naming.template` configured: `{type}/{week}-{year}-{work_item}-{desc}`. Not specific to any project — just a sensible default.
+
+**Global input**:
+A value (`type`, `work-item`, `desc`) the user provides once and that applies uniformly to every selected repo. Distinguished from auto-computed values (`week`, `year`) and from per-repo state (the template itself).
+_Avoid_: Parameter, argument, variable
+
+**Base ref**:
+The fixed commit that every new branch is created from: `origin/main`, fetched fresh at creation time. A repo without `origin/main` fails for that repo only — others continue.

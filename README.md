@@ -86,3 +86,4 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 Personal agent skills, packaged as `SKILL.md` files with frontmatter (`name`, `description`, etc.) — the format is agent-agnostic and works with any tool that loads SKILL files.
 
 - **[`engineering/cleanup-branches`](skills/engineering/cleanup-branches/SKILL.md)** — Delete unwanted local branches from every git repo under the current working directory. Protects `main` / `master` / `develop` and the currently checked-out branch; confirms the full list before deleting.
+- **[`engineering/create-branch`](skills/engineering/create-branch/SKILL.md)** — Create the same logically-named branch across one or more selected repos under the current working directory. Each repo resolves its own naming template via `git config branch.naming.template` (with a sensible default); branches are created locally from a freshly-fetched `origin/main`.

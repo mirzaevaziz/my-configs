@@ -232,4 +232,34 @@
     "command": "-workbench.action.quickchat.toggle",
     "when": "chatIsEnabled",
   },
+
+  // Sidebar resize overrides
+  {
+    "key": "alt+cmd+k",
+    "command": "workbench.action.increaseViewSize",
+  },
+  {
+    "key": "alt+cmd+j",
+    "command": "workbench.action.decreaseViewSize",
+  },
+  {
+    "key": "alt+cmd+k",
+    "command": "-rest-client.cancel-request",
+    "when": "editorTextFocus && editorLangId == 'http'",
+  },
+  {
+    "key": "alt+cmd+k",
+    "command": "-claude-code.insertAtMentioned",
+    "when": "editorTextFocus",
+  },
+  {
+    "key": "alt+cmd+k",
+    "command": "-rest-client.cancel-request",
+    "when": "editorTextFocus && editorLangId == 'plaintext'",
+  },
+  {
+    "key": "alt+cmd+j",
+    "command": "-editor.action.insertSnippet",
+    "when": "editorTextFocus && !editorReadonly && editorLangId == 'powershell'",
+  },
 ]

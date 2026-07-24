@@ -169,6 +169,14 @@
     "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus",
   },
   {
+    "key": "shift+cmd+[",
+    "command": "-workbench.action.previousEditor",
+  },
+  {
+    "key": "shift+cmd+]",
+    "command": "-workbench.action.nextEditor",
+  },
+  {
     "key": "cmd+w",
     "command": "workbench.action.terminal.kill",
     "when": "terminalFocus",

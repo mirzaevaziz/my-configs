@@ -69,6 +69,10 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 - `shift+enter` (terminal) — send `Esc`+`Enter` (useful for shells that bind alt+enter)
 - `ctrl+escape` — return focus from terminal to the editor
 
+**Herdr compatibility:**
+
+- `shift+cmd+[` / `shift+cmd+]` — unbound from `previousEditor` / `nextEditor`, freed up for herdr's `previous_tab` / `next_tab`
+
 **Views:**
 
 - `cmd+e` — focus Explorer (overrides default `shift+cmd+e`)
@@ -80,6 +84,17 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 - `ctrl+shift+p` — trigger parameter hints (overrides command palette default in editor)
 - `cmd+; cmd+l` — rerun last test (replaces default debug-last-run binding)
 - `ctrl+shift+alt+w` — close panel
+
+## `herdr/config.toml`
+
+[Herdr](https://herdr.dev) keybindings (terminal multiplexer for coding agents).
+
+- `prefix+n` / `cmd+]` — next tab
+- `prefix+p` / `cmd+[` — previous tab
+- `cmd+shift+]` / `cmd+shift+[` — next / previous agent
+- `prefix+1..9` / `cmd+shift+1..9` — switch to tab N
+
+**macOS screenshot conflict:** `switch_tab`'s `cmd+shift+1..9` range includes `cmd+shift+3`, `cmd+shift+4`, and `cmd+shift+5` — macOS's default screenshot shortcuts (full screen, selection, Screenshot app). Those intercept the keystroke before herdr sees it, so tabs 3/4/5 won't switch. Fix: System Settings → Keyboard → Keyboard Shortcuts → Screenshots, and disable (or remap) "Save picture of screen as a file", "Save picture of selected area as a file", and "Screenshot and recording options".
 
 ## `skills/`
 

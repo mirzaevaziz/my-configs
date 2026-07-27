@@ -1,4 +1,4 @@
-function repos --description 'VS Code-style status list for all repos under a dir (default: cwd)' --argument-names root
+function repos-info --description 'VS Code-style status list for all repos under a dir (default: cwd)' --argument-names root
     set -q root[1]; or set root $PWD
     for d in (find $root -type d -name .git -maxdepth 4 | sort)
         set repo (dirname $d)

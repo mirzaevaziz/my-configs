@@ -1,4 +1,4 @@
-function syncall --description 'fetch + safe pull every repo under a dir (default: cwd); prompts to stash dirty ones' --argument-names root
+function repos-syncall --description 'fetch + safe pull every repo under a dir (default: cwd); prompts to stash dirty ones' --argument-names root
     set -q root[1]; or set root $PWD
     set -l yesall 0
     set -l conflicts

@@ -15,4 +15,4 @@ alias claude='claude --dangerously-skip-permissions'
 zoxide init fish | source
 fzf --fish | source
 
-# repo helpers (repos, syncall) autoload from functions/
+# repo helpers (repos-info, repos-syncall) autoload from functions/

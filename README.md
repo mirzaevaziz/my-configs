@@ -98,7 +98,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`repos-syncall [dir]`** — fetch + safe-pull every git repo under `dir` (default cwd). Fetches all repos **in parallel** (network is the bottleneck) with a live braille spinner and `N/M` progress counter; SSH runs in `BatchMode` + `ConnectTimeout=10` so an unloaded key or dead connection fails fast instead of hanging. Per repo: skips diverged/ahead, fast-forwards clean-and-behind, and for dirty-and-behind prompts `[y/N/a/q]` to stash → pull → pop (`a` = yes-to-all, `q` = quit); keeps the stash on conflict and lists them at the end.
 - **`repos-info [dir]`** — VS Code-style status list for every repo under `dir` (default cwd): branch, dirty count, ahead/behind arrows.
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
-- **`tomainall`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm).
+- **`repos-tomain`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm).
 
 ### `conf.d/`
 

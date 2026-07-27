@@ -1,4 +1,4 @@
-function tomainall --description 'Checkout each child repo to its default branch (skips dirty)'
+function repos-tomain --description 'Checkout each child repo to its default branch (skips dirty)'
     for dir in */
         set -l repo (string trim -r -c / $dir)
         test -d $repo/.git; or continue
@@ -18,7 +18,7 @@ function tomainall --description 'Checkout each child repo to its default branch
                     echo "aborted"
                     return
                 case y Y
-                    git -C $repo stash push -u -m tomainall >/dev/null 2>&1; and set stashed 1
+                    git -C $repo stash push -u -m repos-tomain >/dev/null 2>&1; and set stashed 1
                 case '*'
                     echo "  skip $repo"
                     continue

@@ -85,6 +85,23 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 - `cmd+; cmd+l` — rerun last test (replaces default debug-last-run binding)
 - `ctrl+shift+alt+w` — close panel
 
+## `fish/`
+
+[Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
+
+### `config.fish`
+
+- **`syncall [dir]`** — fetch + safe-pull every git repo under `dir` (default cwd). Fetches all repos **in parallel** (network is the bottleneck) with a live braille spinner and `N/M` progress counter; SSH runs in `BatchMode` + `ConnectTimeout=10` so an unloaded key or dead connection fails fast instead of hanging. Per repo: skips diverged/ahead, fast-forwards clean-and-behind, and for dirty-and-behind prompts `[y/N/a/q]` to stash → pull → pop (`a` = yes-to-all, `q` = quit); keeps the stash on conflict and lists them at the end.
+
+### `functions/`
+
+- **`cs`** / **`cs-update-all`** — codebase-search helpers.
+- **`tomainall`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm).
+
+### `conf.d/`
+
+- **`rustup.fish`** — rustup/cargo env (machine-generated).
+
 ## `herdr/config.toml`
 
 [Herdr](https://herdr.dev) keybindings (terminal multiplexer for coding agents).

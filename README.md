@@ -62,6 +62,15 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 | `cmd+ctrl+h` / `cmd+ctrl+l` | shrink / grow the focused view — sidebar or editor group |
 | `cmd+ctrl+j` / `cmd+ctrl+k` | reorder the active editor tab left / right *within* its group |
 
+**Focus modes:**
+
+| keys | action |
+| --- | --- |
+| `cmd+opt+f` | maximize the focused editor group — hides sidebar and panel, keeps tabs, no OS fullscreen |
+| `cmd+opt+z` | Zen Mode — hides all chrome and goes OS fullscreen (`esc esc` to exit) |
+
+`cmd+opt+f` is scoped `!findWidgetVisible` so the default `toggleFindReplace` keeps the key while the find widget is open. Trade-off: no maximizing until the widget is closed with `esc`. `cmd+opt+z` is additive — the default `cmd+k z` still works. Zen's OS-fullscreen half is a setting, not a binding: `"zenMode.fullScreen": false` in `settings.json` keeps it in-window (settings aren't synced by this repo).
+
 `cmd+j` / `cmd+k` also cycle the suggestion widget, Quick Open results, and terminal panes when those have focus — those `when`-scoped bindings sit *below* in the file, so they win in their own context.
 
 Defaults that had to be displaced: `cmd+shift+k` (`deleteLines`), `cmd+shift+l` (select all occurrences), `cmd+l` (expand line selection — needs an explicit `-expandLineSelection` entry). Extension bindings on `alt+cmd+j/k` (`rest-client`, `claude-code.insertAtMentioned`, `insertSnippet`) are unbound so spatial focus reaches them.

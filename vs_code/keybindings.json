@@ -124,6 +124,19 @@
       "to": "right",
     },
   },
+  // cmd+opt+f — maximize the focused editor group (hides sidebar/panel).
+  // Scoped to !findWidgetVisible so the default toggleFindReplace still owns
+  // the key whenever the find widget is open.
+  {
+    "key": "alt+cmd+f",
+    "command": "workbench.action.toggleMaximizeEditorGroup",
+    "when": "!findWidgetVisible",
+  },
+  // cmd+opt+z — zen mode (esc esc to exit)
+  {
+    "key": "alt+cmd+z",
+    "command": "workbench.action.toggleZenMode",
+  },
 
   // Suggest Widget and Quick Open Traversal
   {

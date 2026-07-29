@@ -51,12 +51,23 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 **Vim-style list and editor navigation:**
 
 - `j` / `k` — move down / up in any list when focus is on a list (not an input)
-- `cmd+k` / `cmd+j` — next / previous editor (also: cycles suggestion widget, Quick Open results, and terminal panes when those have focus)
+- `cmd+j` / `cmd+k` — cycle the suggestion widget, Quick Open results, and terminal panes when those have focus (these `when`-scoped bindings sit *below* the group bindings in the file, so they win in their own context)
+- `alt+cmd+left` / `alt+cmd+right` — previous / next editor
 
-**Editor group movement:**
+**Editor groups — i3wm model:**
 
-- `cmd+shift+k` / `cmd+shift+j` — move active editor to next / previous group (overrides default `deleteLines`)
-- `cmd+ctrl+j` / `cmd+ctrl+k` — move active editor left / right
+- `cmd+h` / `cmd+j` / `cmd+k` / `cmd+l` — focus the group left / below / above / right
+- `cmd+shift+h` / `cmd+shift+j` / `cmd+shift+k` / `cmd+shift+l` — move the active editor to that group, splitting a new one if it doesn't exist (`cmd+shift+k` overrides default `deleteLines`, `cmd+shift+l` overrides select-all-occurrences, `cmd+l` overrides expand-line-selection)
+- `cmd+ctrl+j` / `cmd+ctrl+k` — reorder the active editor tab left / right *within* its group
+
+`cmd+h` only reaches VS Code once macOS "Hide" is reassigned. Per machine, not synced by this repo:
+
+```sh
+defaults write com.microsoft.VSCode NSUserKeyEquivalents \
+  -dict-add "Hide Visual Studio Code" '@~^$h'
+```
+
+Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts. The menu title must match exactly — Insiders needs `Hide Visual Studio Code - Insiders`.
 
 **Terminal:**
 

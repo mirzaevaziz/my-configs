@@ -28,15 +28,28 @@
   },
 
   // Editor Navigation and Layout
+  //
+  // i3wm model: cmd+hjkl focuses a group, cmd+shift+hjkl moves the editor there.
+  // cmd+h requires macOS "Hide" to be reassigned first, per machine:
+  //   defaults write com.microsoft.VSCode NSUserKeyEquivalents \
+  //     -dict-add "Hide Visual Studio Code" '@~^$h'
+  // These sit *above* the suggest/quick-open/terminal blocks on purpose — those
+  // have `when` clauses and are later in the file, so they still win in context.
   {
-    "key": "cmd+k",
-    "command": "workbench.action.nextEditor",
-    "when": "!terminalFocus || terminalEditorFocus",
+    "key": "cmd+h",
+    "command": "workbench.action.focusLeftGroup",
   },
   {
     "key": "cmd+j",
-    "command": "workbench.action.previousEditor",
-    "when": "!terminalFocus || terminalEditorFocus",
+    "command": "workbench.action.focusBelowGroup",
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.focusAboveGroup",
+  },
+  {
+    "key": "cmd+l",
+    "command": "workbench.action.focusRightGroup",
   },
   {
     "key": "cmd+shift+k",
@@ -44,14 +57,29 @@
     "when": "textInputFocus && !editorReadonly",
   },
   {
-    "key": "cmd+shift+k",
-    "command": "workbench.action.moveEditorToNextGroup",
-    "when": "",
+    "key": "cmd+shift+h",
+    "command": "workbench.action.moveEditorToLeftGroup",
   },
   {
     "key": "cmd+shift+j",
-    "command": "workbench.action.moveEditorToPreviousGroup",
-    "when": "",
+    "command": "workbench.action.moveEditorToBelowGroup",
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "workbench.action.moveEditorToAboveGroup",
+  },
+  {
+    "key": "cmd+shift+l",
+    "command": "workbench.action.moveEditorToRightGroup",
+  },
+  // prev/next editor, displaced off cmd+j/k by the i3 layer
+  {
+    "key": "alt+cmd+left",
+    "command": "workbench.action.previousEditor",
+  },
+  {
+    "key": "alt+cmd+right",
+    "command": "workbench.action.nextEditor",
   },
   {
     "key": "cmd+ctrl+j",

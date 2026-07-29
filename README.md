@@ -56,7 +56,7 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 **Editor groups — i3wm model:**
 
 - `cmd+h` / `cmd+l` — focus the group left / right (`cmd+l` needs the explicit `-expandLineSelection` unbind)
-- `ctrl+j` / `ctrl+k` — focus the group below / above (vertical rides `ctrl` so `cmd+j/k` can stay on editor traversal)
+- no vertical focus binding — `cmd+j` / `cmd+k` already walk every editor in every group, so they reach an above/below group on their own
 - `cmd+shift+h` / `cmd+shift+j` / `cmd+shift+k` / `cmd+shift+l` — move the active editor to that group, splitting a new one if it doesn't exist (`cmd+shift+k` overrides default `deleteLines`, `cmd+shift+l` overrides select-all-occurrences, `cmd+l` overrides expand-line-selection)
 - `cmd+ctrl+j` / `cmd+ctrl+k` — reorder the active editor tab left / right *within* its group
 

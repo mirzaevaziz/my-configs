@@ -39,15 +39,8 @@
     "key": "cmd+h",
     "command": "workbench.action.focusLeftGroup",
   },
-  {
-    "key": "ctrl+j",
-    "command": "workbench.action.focusBelowGroup",
-  },
-  {
-    "key": "ctrl+k",
-    "command": "workbench.action.focusAboveGroup",
-  },
-  // editor traversal stays on cmd+j/k; vertical group focus rides ctrl
+  // No vertical focus binding: nextEditor/previousEditor already walk every
+  // editor in every group, so cmd+j/k reaches an above/below group on its own.
   {
     "key": "cmd+j",
     "command": "workbench.action.previousEditor",

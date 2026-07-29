@@ -262,6 +262,11 @@
     "when": "terminalFocus",
   },
   {
+    "key": "cmd+r",
+    "command": "workbench.action.terminal.rename",
+    "when": "terminalFocus",
+  },
+  {
     "key": "ctrl+shift+alt+w",
     "command": "workbench.action.closePanel",
   },

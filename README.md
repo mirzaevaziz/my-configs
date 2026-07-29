@@ -94,6 +94,7 @@ Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → 
 - `cmd+]` / `cmd+[` — focus next / previous terminal
 - `shift+enter` (terminal) — send `Esc`+`Enter` (useful for shells that bind alt+enter)
 - `ctrl+escape` — return focus from terminal to the editor
+- `cmd+r` (terminal focused) — rename the terminal tab (`workbench.action.terminal.rename`, no default binding)
 
 **Herdr compatibility:**
 

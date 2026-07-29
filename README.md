@@ -141,6 +141,17 @@ That last rule is off on purpose. `cmd+H` is not a system hotkey — it's a **Hi
 ]
 ```
 
+## Raycast (not versioned)
+
+Nothing to commit — Raycast keeps its state in an encrypted `raycast-enc.sqlite` plus a `com.raycast.macos` plist that's mostly machine-local noise (per-monitor window position caches, analytics IDs, migration dates). None of it diffs or transplants.
+
+To move it to a new machine: **Raycast Settings → Advanced → Export Settings & Data**, which writes a binary `.rayconfig`. Import through the same panel. Deliberately kept out of this repo: it's opaque to review, silently rots against reality, and if password-encrypted it's useless without the password anyway.
+
+Worth recording since it's invisible in the export:
+
+- Global hotkey — `cmd+space` (stored as `raycastGlobalHotkey = "Command-49"`).
+- Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
+
 ## `herdr/config.toml`
 
 [Herdr](https://herdr.dev) keybindings (terminal multiplexer for coding agents).

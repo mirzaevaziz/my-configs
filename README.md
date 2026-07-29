@@ -122,6 +122,25 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 
 - **`rustup.fish`** — rustup/cargo env (machine-generated).
 
+## `karabiner/karabiner.json`
+
+[Karabiner-Elements](https://karabiner-elements.pqrs.org) config. Three complex-modification rules in the default profile:
+
+- **caps_lock → hyper / escape** — held, it's `ctrl+opt+shift`; tapped alone, `escape`.
+- **hyper+`hjkl` → arrow keys** — `ctrl+opt+shift+hjkl` sends left / down / up / right, so vim motions work in any app.
+- **`cmd+h` disable** — `"enabled": false`. Left in the file as a switch, not active.
+
+That last rule is off on purpose. `cmd+H` is not a system hotkey — it's a **Hide** menu item in each app's own App menu, so a Karabiner rule can only swallow the key globally, which would also block the `cmd+h` binding VS Code needs. Freeing it per app is [`NSUserKeyEquivalents`](#vs_codekeybindingsjson) instead. If you ever do want it dead everywhere *except* VS Code, enable the rule and scope it:
+
+```json
+"conditions": [
+    {
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.microsoft\\.VSCode$"]
+    }
+]
+```
+
 ## `herdr/config.toml`
 
 [Herdr](https://herdr.dev) keybindings (terminal multiplexer for coding agents).

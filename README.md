@@ -51,12 +51,12 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 **Vim-style list and editor navigation:**
 
 - `j` / `k` — move down / up in any list when focus is on a list (not an input)
-- `cmd+j` / `cmd+k` — cycle the suggestion widget, Quick Open results, and terminal panes when those have focus (these `when`-scoped bindings sit *below* the group bindings in the file, so they win in their own context)
-- `alt+cmd+left` / `alt+cmd+right` — previous / next editor
+- `cmd+j` / `cmd+k` — previous / next editor; also cycles the suggestion widget, Quick Open results, and terminal panes when those have focus (those `when`-scoped bindings sit *below* in the file, so they win in their own context)
 
 **Editor groups — i3wm model:**
 
-- `cmd+h` / `cmd+j` / `cmd+k` / `cmd+l` — focus the group left / below / above / right
+- `cmd+h` / `cmd+l` — focus the group left / right (`cmd+l` needs the explicit `-expandLineSelection` unbind)
+- `ctrl+j` / `ctrl+k` — focus the group below / above (vertical rides `ctrl` so `cmd+j/k` can stay on editor traversal)
 - `cmd+shift+h` / `cmd+shift+j` / `cmd+shift+k` / `cmd+shift+l` — move the active editor to that group, splitting a new one if it doesn't exist (`cmd+shift+k` overrides default `deleteLines`, `cmd+shift+l` overrides select-all-occurrences, `cmd+l` overrides expand-line-selection)
 - `cmd+ctrl+j` / `cmd+ctrl+k` — reorder the active editor tab left / right *within* its group
 

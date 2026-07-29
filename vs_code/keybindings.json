@@ -40,12 +40,23 @@
     "command": "workbench.action.focusLeftGroup",
   },
   {
-    "key": "cmd+j",
+    "key": "ctrl+j",
     "command": "workbench.action.focusBelowGroup",
   },
   {
-    "key": "cmd+k",
+    "key": "ctrl+k",
     "command": "workbench.action.focusAboveGroup",
+  },
+  // editor traversal stays on cmd+j/k; vertical group focus rides ctrl
+  {
+    "key": "cmd+j",
+    "command": "workbench.action.previousEditor",
+    "when": "!terminalFocus || terminalEditorFocus",
+  },
+  {
+    "key": "cmd+k",
+    "command": "workbench.action.nextEditor",
+    "when": "!terminalFocus || terminalEditorFocus",
   },
   {
     "key": "cmd+l",
@@ -72,14 +83,11 @@
     "key": "cmd+shift+l",
     "command": "workbench.action.moveEditorToRightGroup",
   },
-  // prev/next editor, displaced off cmd+j/k by the i3 layer
+  // cmd+l would otherwise lose to expandLineSelection
   {
-    "key": "alt+cmd+left",
-    "command": "workbench.action.previousEditor",
-  },
-  {
-    "key": "alt+cmd+right",
-    "command": "workbench.action.nextEditor",
+    "key": "cmd+l",
+    "command": "-expandLineSelection",
+    "when": "textInputFocus",
   },
   {
     "key": "cmd+ctrl+j",

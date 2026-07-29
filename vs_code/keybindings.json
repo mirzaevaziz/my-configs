@@ -27,9 +27,13 @@
     "when": "remoteFileDialogVisible",
   },
 
-  // Editor Navigation and Layout
+  // Editor Navigation and Layout — hjkl on four modifiers
   //
-  // i3wm model: cmd+hjkl focuses a group, cmd+shift+hjkl moves the editor there.
+  //   cmd+hjkl        j/k traverse editors, h/l cycle groups
+  //   cmd+shift+hjkl  move the editor to the group in that direction
+  //   cmd+opt+hjkl    focus the group in that direction
+  //   cmd+ctrl+h/l    resize the focused view; cmd+ctrl+j/k reorder tab in group
+  //
   // cmd+h requires macOS "Hide" to be reassigned first, per machine:
   //   defaults write com.microsoft.VSCode NSUserKeyEquivalents \
   //     -dict-add "Hide Visual Studio Code" '@~^$h'
@@ -37,10 +41,8 @@
   // have `when` clauses and are later in the file, so they still win in context.
   {
     "key": "cmd+h",
-    "command": "workbench.action.focusLeftGroup",
+    "command": "workbench.action.focusPreviousGroup",
   },
-  // No vertical focus binding: nextEditor/previousEditor already walk every
-  // editor in every group, so cmd+j/k reaches an above/below group on its own.
   {
     "key": "cmd+j",
     "command": "workbench.action.previousEditor",
@@ -53,7 +55,7 @@
   },
   {
     "key": "cmd+l",
-    "command": "workbench.action.focusRightGroup",
+    "command": "workbench.action.focusNextGroup",
   },
   {
     "key": "cmd+shift+k",
@@ -81,6 +83,32 @@
     "key": "cmd+l",
     "command": "-expandLineSelection",
     "when": "textInputFocus",
+  },
+  // cmd+opt+hjkl — spatial group focus
+  {
+    "key": "alt+cmd+h",
+    "command": "workbench.action.focusLeftGroup",
+  },
+  {
+    "key": "alt+cmd+j",
+    "command": "workbench.action.focusBelowGroup",
+  },
+  {
+    "key": "alt+cmd+k",
+    "command": "workbench.action.focusAboveGroup",
+  },
+  {
+    "key": "alt+cmd+l",
+    "command": "workbench.action.focusRightGroup",
+  },
+  // cmd+ctrl+h/l — resize the focused view (sidebar or editor group)
+  {
+    "key": "cmd+ctrl+h",
+    "command": "workbench.action.decreaseViewSize",
+  },
+  {
+    "key": "cmd+ctrl+l",
+    "command": "workbench.action.increaseViewSize",
   },
   {
     "key": "cmd+ctrl+j",
@@ -270,15 +298,7 @@
     "when": "chatIsEnabled",
   },
 
-  // Sidebar resize overrides
-  {
-    "key": "alt+cmd+k",
-    "command": "workbench.action.increaseViewSize",
-  },
-  {
-    "key": "alt+cmd+j",
-    "command": "workbench.action.decreaseViewSize",
-  },
+  // Extension bindings cleared off alt+cmd+j/k, now spatial group focus
   {
     "key": "alt+cmd+k",
     "command": "-rest-client.cancel-request",

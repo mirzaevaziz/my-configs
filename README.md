@@ -51,14 +51,20 @@ VS Code keybinding overrides. Vim-flavored, with native VS Code commands (not de
 **Vim-style list and editor navigation:**
 
 - `j` / `k` — move down / up in any list when focus is on a list (not an input)
-- `cmd+j` / `cmd+k` — previous / next editor; also cycles the suggestion widget, Quick Open results, and terminal panes when those have focus (those `when`-scoped bindings sit *below* in the file, so they win in their own context)
+**Editor navigation and layout — `hjkl` across four modifiers:**
 
-**Editor groups — i3wm model:**
+| keys | action |
+| --- | --- |
+| `cmd+j` / `cmd+k` | previous / next editor |
+| `cmd+h` / `cmd+l` | previous / next group (cycles by group order, wraps) |
+| `cmd+shift+hjkl` | move the active editor to the group left / below / above / right, splitting one if it doesn't exist |
+| `cmd+opt+hjkl` | focus the group left / below / above / right (spatial) |
+| `cmd+ctrl+h` / `cmd+ctrl+l` | shrink / grow the focused view — sidebar or editor group |
+| `cmd+ctrl+j` / `cmd+ctrl+k` | reorder the active editor tab left / right *within* its group |
 
-- `cmd+h` / `cmd+l` — focus the group left / right (`cmd+l` needs the explicit `-expandLineSelection` unbind)
-- no vertical focus binding — `cmd+j` / `cmd+k` already walk every editor in every group, so they reach an above/below group on their own
-- `cmd+shift+h` / `cmd+shift+j` / `cmd+shift+k` / `cmd+shift+l` — move the active editor to that group, splitting a new one if it doesn't exist (`cmd+shift+k` overrides default `deleteLines`, `cmd+shift+l` overrides select-all-occurrences, `cmd+l` overrides expand-line-selection)
-- `cmd+ctrl+j` / `cmd+ctrl+k` — reorder the active editor tab left / right *within* its group
+`cmd+j` / `cmd+k` also cycle the suggestion widget, Quick Open results, and terminal panes when those have focus — those `when`-scoped bindings sit *below* in the file, so they win in their own context.
+
+Defaults that had to be displaced: `cmd+shift+k` (`deleteLines`), `cmd+shift+l` (select all occurrences), `cmd+l` (expand line selection — needs an explicit `-expandLineSelection` entry). Extension bindings on `alt+cmd+j/k` (`rest-client`, `claude-code.insertAtMentioned`, `insertSnippet`) are unbound so spatial focus reaches them.
 
 `cmd+h` only reaches VS Code once macOS "Hide" is reassigned. Per machine, not synced by this repo:
 

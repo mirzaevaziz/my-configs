@@ -38,29 +38,27 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
         set -l name (basename $repo)
         string match -q _tmp $name; and test "$repo" != "$root"; and continue
         set -l br (git -C $repo branch --show-current); test -n "$br"; or set br detached
-        set -l label "$name@$br"
-        set -l pad (math 52 - (string length "$label")); test $pad -lt 0; and set pad 0
-        set -l disp (set_color blue)$name(set_color normal)@(set_color green)$br(set_color normal)(string repeat -n $pad ' ')
-        set name $label
+        set -l disp (__repos_label $repo)
+        set name "$name@$br"
 
         set -l ab (git -C $repo rev-list --count --left-right '@{u}...HEAD' 2>/dev/null)
         if test -z "$ab"
-            printf "%s %s\n" $disp "SKIP (no upstream)"; continue
+            printf "%s %s\n" $disp (__repos_status warn "SKIP (no upstream)"); continue
         end
         set -l behind (echo $ab | awk '{print $1}')
         set -l ahead (echo $ab | awk '{print $2}')
         set -l dirty (git -C $repo status --porcelain | count)
 
         if test "$ahead" -gt 0
-            printf "%s %s\n" $disp "SKIP (diverged — $ahead ahead)"; continue
+            printf "%s %s\n" $disp (__repos_status warn "SKIP (diverged — $ahead ahead)"); continue
         end
         if test "$behind" -eq 0
-            printf "%s %s\n" $disp "up-to-date"; continue
+            printf "%s %s\n" $disp (__repos_status ok "up-to-date"); continue
         end
         if test "$dirty" -eq 0
             git -C $repo merge --ff-only '@{u}' >/dev/null 2>&1
-            and printf "%s %s\n" $disp "synced ↓$behind"
-            or  printf "%s %s\n" $disp "SKIP (ff failed)"
+            and printf "%s %s\n" $disp (__repos_status ok "synced ↓$behind")
+            or  printf "%s %s\n" $disp (__repos_status err "SKIP (ff failed)")
             continue
         end
 
@@ -72,24 +70,24 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
             switch $ans
                 case a A; set yesall 1
                 case y Y # proceed
-                case q Q; printf "%s %s\n" $disp "quit"; break
-                case '*'; printf "%s %s\n" $disp "SKIP (you chose no)"; continue
+                case q Q; printf "%s %s\n" $disp (__repos_status warn "quit"); break
+                case '*'; printf "%s %s\n" $disp (__repos_status warn "SKIP (you chose no)"); continue
             end
         end
 
         # stash -> pull -> pop, guarding the stash the whole way
         if not git -C $repo stash -u >/dev/null 2>&1
-            printf "%s %s\n" $disp "SKIP (stash failed)"; continue
+            printf "%s %s\n" $disp (__repos_status err "SKIP (stash failed)"); continue
         end
         if not git -C $repo merge --ff-only '@{u}' >/dev/null 2>&1
             git -C $repo stash pop >/dev/null 2>&1
-            printf "%s %s\n" $disp "SKIP (pull failed — restored)"; continue
+            printf "%s %s\n" $disp (__repos_status err "SKIP (pull failed — restored)"); continue
         end
         if git -C $repo stash pop >/dev/null 2>&1
-            printf "%s %s\n" $disp "synced+popped ↓$behind"
+            printf "%s %s\n" $disp (__repos_status ok "synced+popped ↓$behind")
         else
             set -a conflicts $name
-            set_color red; printf "%s %s\n" $disp "CONFLICT (stash kept — resolve)"; set_color normal
+            printf "%s %s\n" $disp (__repos_status err "CONFLICT (stash kept — resolve)")
         end
     end
     if set -q conflicts[1]

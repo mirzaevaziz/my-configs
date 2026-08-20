@@ -38,8 +38,10 @@ function repos-revert --description 'VS Code-style discard-all across repos: sta
 
         test $staged -eq 0; and test $changed -eq 0; and test $todel -eq 0; and continue
 
+        set -l br (git -C $repo branch --show-current); test -n "$br"; or set br detached
         set_color --bold blue; printf "\n%s" $name; set_color normal
-        printf "  staged %s  changed %s  to-delete %s  stashes %s\n" $staged $changed $todel $stashes
+        printf "@"; set_color green; printf "%s" $br; set_color normal
+        printf "  staged %s  changed %s  to-delete %s  stashes %s\n" (__repos_status warn $staged) (__repos_status warn $changed) (__repos_status err $todel) $stashes
 
         if test $dry -eq 1
             git -C $repo status --short | string replace -r '^' '  '
@@ -153,5 +155,5 @@ function repos-revert --description 'VS Code-style discard-all across repos: sta
 
     test $quit -eq 1; and echo "aborted"
     test $dry -eq 1; and return 0
-    printf "\n%s reverted, %s skipped, %s stashes dropped\n" $n_reverted $n_skipped $n_stashes
+    printf "\n%s reverted, %s skipped, %s stashes dropped\n" (__repos_status ok $n_reverted) (__repos_status warn $n_skipped) (__repos_status err $n_stashes)
 end

@@ -173,6 +173,14 @@ Worth recording since it's invisible in the export:
 
 **macOS screenshot conflict:** `switch_tab`'s `cmd+shift+1..9` range includes `cmd+shift+3`, `cmd+shift+4`, and `cmd+shift+5` — macOS's default screenshot shortcuts (full screen, selection, Screenshot app). Those intercept the keystroke before herdr sees it, so tabs 3/4/5 won't switch. Fix: System Settings → Keyboard → Keyboard Shortcuts → Screenshots, and disable (or remap) "Save picture of screen as a file", "Save picture of selected area as a file", and "Screenshot and recording options".
 
+## `herdr/`
+
+[Herdr](https://herdr.dev) subagent wiring for Claude Code and pi.dev — how delegated/parallel work gets its own labeled herdr tab instead of an invisible in-process run.
+
+- **`skills/`** — snapshot of `~/.agents/skills/herdr` (the `herdr` skill Claude Code loads via `~/.claude/skills/herdr`, a symlink to that path). `SKILL.md` documents the routing rules; `scripts/claude_pane.py` and `scripts/pi_pane.py` are the one-call drivers that split a tab, start the agent, send the prompt, and harvest the result.
+- **`hooks/`** — snapshot of `~/.claude/hooks/herdr-subagent-redirect.sh` (a `PreToolUse` hook on `Task|Agent` that blocks Claude Code's in-process Agent tool under `HERDR_ENV=1` and tells the caller to use `claude_pane.py` instead) and `herdr-agent-state.sh` (`SessionStart` hook that drives herdr's tab-state tracking).
+- **`setup.sh`** — installs the above onto a fresh machine: copies the skill + scripts to `~/.agents/skills/herdr`, copies the hooks to `~/.claude/hooks/`, symlinks `~/.claude/skills/herdr -> ../../.agents/skills/herdr`, and `jq`-merges the two hook registrations into `~/.claude/settings.json` (idempotent — skips entries already present, leaves the rest of the file untouched). Requires `jq`.
+
 ## `skills/`
 
 Personal agent skills, packaged as `SKILL.md` files with frontmatter (`name`, `description`, etc.) — the format is agent-agnostic and works with any tool that loads SKILL files.

@@ -5,22 +5,31 @@ function repos-tomain --description 'Checkout each child repo to its default bra
 
         set -l def (git -C $repo symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | string replace 'origin/' '')
         if test -z "$def"
-            echo "⚠ $repo: no default branch (skip)"
+            printf "%s %s\n" (__repos_label $repo) (__repos_status warn "SKIP (no default branch)")
+            continue
+        end
+
+        set -l disp (__repos_label $repo)
+
+        if test (git -C $repo symbolic-ref --short HEAD 2>/dev/null) = "$def"
+            printf "%s %s\n" $disp (__repos_status ok "already on $def")
             continue
         end
 
         set -l dirty (git -C $repo status --porcelain)
         set -l stashed 0
         if test -n "$dirty"
+            set_color yellow
             read -l -P "⚠ $repo dirty — stash & switch? [y/N/q] " ans
+            set_color normal
             switch $ans
                 case q Q
-                    echo "aborted"
+                    printf "%s %s\n" $disp (__repos_status warn "aborted")
                     return
                 case y Y
                     git -C $repo stash push -u -m repos-tomain >/dev/null 2>&1; and set stashed 1
                 case '*'
-                    echo "  skip $repo"
+                    printf "%s %s\n" $disp (__repos_status warn "SKIP (you chose no)")
                     continue
             end
         end
@@ -28,13 +37,13 @@ function repos-tomain --description 'Checkout each child repo to its default bra
         if git -C $repo checkout $def >/dev/null 2>&1
             if test $stashed -eq 1
                 git -C $repo stash pop >/dev/null 2>&1
-                echo "✓ $repo → $def (stash popped)"
+                printf "%s %s\n" $disp (__repos_status ok "→ $def (stash popped)")
             else
-                echo "✓ $repo → $def"
+                printf "%s %s\n" $disp (__repos_status ok "→ $def")
             end
         else
             test $stashed -eq 1; and git -C $repo stash pop >/dev/null 2>&1
-            echo "✗ $repo: checkout $def failed"
+            printf "%s %s\n" $disp (__repos_status err "checkout $def failed")
         end
     end
 end

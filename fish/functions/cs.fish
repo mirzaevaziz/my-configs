@@ -10,5 +10,7 @@ function cs --description 'codesearch: ensure daemon is up, then semantic search
         end
         echo "✅ daemon up" >&2
     end
-    codesearch search $argv --model jina-code
+    # -q drops the startup banner; --create-index=false fails fast instead of
+    # kicking off a 2-minute reindex. Both overridable by passing the flag yourself.
+    codesearch search $argv --model jina-code -q --create-index=false
 end

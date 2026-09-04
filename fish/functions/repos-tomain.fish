@@ -1,5 +1,9 @@
 function repos-tomain --description 'Checkout each child repo to its default branch (skips dirty)'
-    for dir in */
+    # ponytail: current repo when run inside one, else child repos
+    set -l repos */
+    test -d .git; and set repos ./
+
+    for dir in $repos
         set -l repo (string trim -r -c / $dir)
         test -d $repo/.git; or continue
 

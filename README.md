@@ -2,47 +2,25 @@
 
 Reference copies of my personal editor configs and agent skills. These are snapshots synced from my machine — not symlinked, so they may lag the live versions. Take whatever's useful.
 
-## `nvim/init.lua`
+## `nvim/`
 
-Neovim configuration. Runs both as standalone Neovim and inside the [`vscode-neovim`](https://github.com/vscode-neovim/vscode-neovim) extension; behavior branches on `vim.g.vscode`.
+Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickstart.nvim) fork, standalone only (the old `vscode-neovim` branching on `vim.g.vscode` is gone; VS Code now runs its own keybindings, see below). Plugins come from Neovim's built-in `vim.pack`, not `lazy.nvim`. Snapshot covers `init.lua`, the `lua/custom/plugins/` files, and the one kickstart plugin overridden (`neo-tree.lua`).
 
-**Plugin manager:** [`lazy.nvim`](https://github.com/folke/lazy.nvim) — auto-bootstraps on first launch (clones itself into `stdpath("data")/lazy/`).
+**Language servers:** `ts_ls`, `eslint`, `basedpyright`, `ruff`, and `lua_ls`, installed via Mason. C# uses [`roslyn.nvim`](https://github.com/seblyng/roslyn.nvim) rather than the `servers` table — the Roslyn server speaks LSP extensions for solution loading that plain lspconfig cannot handle, and it needs the `roslyn-language-server` dotnet global tool on `$PATH`. OmniSharp is discontinued.
 
-**Plugins:**
+**Formatting** (conform): `stylua` for Lua, `ruff_organize_imports` + `ruff_format` for Python, `prettierd` (falling back to `prettier`) for JS/TS/React, `csharpier` for C#.
 
-- [`flash.nvim`](https://github.com/folke/flash.nvim) — `f`/`F` jump motions (char mode disabled to preserve native `f`/`F`/`t`/`T`), treesitter node selection, remote/treesitter-search operators
-- [`nvim-treesitter`](https://github.com/nvim-treesitter/nvim-treesitter) — syntax highlighting, indent, incremental selection (`<C-space>`), and textobjects (`af`/`if`/`ac`/`ic` for around/inside function/class)
-- [`nvim-ts-context-commentstring`](https://github.com/JoosepAlviste/nvim-ts-context-commentstring) — context-aware comment strings
+**Custom plugins** — these replace the VS Code panels:
 
-**Treesitter parsers installed:** `bash`, `c`, `cpp`, `css`, `c_sharp`, `html`, `javascript`, `json`, `lua`, `markdown`, `markdown_inline`, `python`, `query`, `rust`, `tsx`, `typescript`, `vim`, `yaml`.
+- `git.lua` — `<leader>gg` opens lazygit in the repo of the *current file*, not Neovim's cwd, so a workspace holding several repos works unconfigured. Also `<leader>gr`/`gs`/`gc`/`gb`. Gutter and per-hunk actions come from gitsigns.
+- `docker.lua` — `<leader>d*` docker compose commands, scoped the same way (nearest `compose.yaml` at or above the current file).
+- `flash.lua` — `f`/`F` jump and treesitter-node motions, `r`/`R` operators, `<C-s>` toggle in search. Char mode stays off so `t`/`T` remain stock vim.
+- `lists.lua` — `<leader>x` / `<leader>X` toggle the quickfix and location lists, which are separate and do not share commands.
+- `scrolling.lua` — `<C-d>`/`<C-u>` and `n`/`N` re-centre the cursor after moving.
 
-**Notable mappings** (`<leader>` = space):
+**Other changes from stock kickstart:** relative line numbers; telescope `find_files` and `live_grep` show hidden files but exclude `.git/`; blink.cmp uses the `super-tab` preset plus `<CR>` to accept; neo-tree gets vim-style `h`/`l` folder navigation (stock leaves `h` unmapped and binds `l` to `focus_preview`).
 
-- `<leader>c` — open `~/.config/nvim/init.lua`
-- `<leader>s` — write buffer
-- `<leader><Esc>` — clear search highlighting
-- `U` — redo (i.e. `<C-r>`)
-- `p` in visual mode — paste without overwriting the register
-- `j` / `k` — move by visual line (skip wrapped-line folds)
-
-**Global options:** system clipboard sync (`unnamedplus`), `ignorecase` + `smartcase`, `termguicolors`.
-
-### VS Code mode (`vim.g.vscode` is set)
-
-Adds leader mappings that delegate to VS Code commands via `VSCodeNotify`:
-
-- `<leader>b` / `<leader>t` — focus / toggle primary sidebar
-- `<leader>e` / `<leader>f` / `<leader>g` / `<leader>x` — focus Explorer / Search / Source Control / Extensions
-- `<leader>q` — open Problems panel
-- `<leader>ca` — Quick Fix
-- `<leader>h` / `<leader>l` / `<leader>k` / `<leader>j` — focus editor group left / right / above / below
-- `]d` / `[d` — next / previous diagnostic in files
-- `]e` / `[e` — next / previous diagnostic in current file
-- `gd` / `gD` — Go to Implementation / Peek Implementations
-
-### Pure Neovim mode (otherwise)
-
-- `<C-d>` / `<C-u>` — half-page scroll with auto-center
+**Not snapshotted:** `nvim-pack-lock.json` (gitignored upstream) and the rest of the kickstart tree, which is unmodified.
 
 ## `vs_code/keybindings.json`
 

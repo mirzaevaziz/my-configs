@@ -20,7 +20,7 @@ macos-titlebar-style = tabs
 
 # ══ hjkl navigation — mirrors VS Code keybindings.json ═══════
 #
-#   cmd+hjkl        j/k traverse tabs, h/l cycle splits
+#   cmd+hjkl        h/l traverse tabs, j/k scroll the scrollback
 #   cmd+shift+hjkl  new split in that direction
 #   cmd+opt+hjkl    focus the split in that direction
 #   cmd+ctrl+h/l    resize the focused split; cmd+ctrl+j/k reorder tab
@@ -29,11 +29,15 @@ macos-titlebar-style = tabs
 #   defaults write com.mitchellh.ghostty NSUserKeyEquivalents \
 #     -dict-add "Hide Ghostty" '@~^$h'
 
-# cmd+hjkl — tabs on j/k, splits on h/l
-keybind = super+h=goto_split:previous
-keybind = super+j=previous_tab
-keybind = super+k=next_tab
-keybind = super+l=goto_split:next
+# cmd+hjkl — tabs on h/l, scrollback on j/k (vim motion)
+# (split cycling dropped: cmd+opt+hjkl already does spatial split focus)
+keybind = super+h=previous_tab
+keybind = super+l=next_tab
+# send PgUp/PgDn instead of scroll_page_*: alt-screen TUIs (Claude Code)
+# do their own scrolling and ignore Ghostty's scrollback actions.
+# Plain shell scrollback: shift+fn+up / shift+fn+down.
+keybind = super+j=text:\x1b[6~
+keybind = super+k=text:\x1b[5~
 
 # cmd+shift+hjkl — new split in that direction
 # (Ghostty has no "move surface to split"; creating one is the closest analog)
@@ -56,3 +60,6 @@ keybind = super+ctrl+k=move_tab:1
 
 # super+shift+j owns split-down now
 keybind = super+shift+d=unbind
+
+# cmd+shift+w freed for macOS "Move Tab to New Window" App Shortcut
+keybind = super+shift+w=unbind

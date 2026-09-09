@@ -23,3 +23,8 @@ if not contains "/Users/aziz_mirzayev/.local/bin" $PATH
 end
 
 eval (/opt/homebrew/bin/brew shellenv fish)
+
+
+# editor
+set -gx EDITOR nvim
+set -gx VISUAL nvim

@@ -18,6 +18,7 @@ Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickst
 - `flash.lua` — `f`/`F` jump and treesitter-node motions, `r`/`R` operators, `<C-s>` toggle in search. Char mode stays off so `t`/`T` remain stock vim.
 - `lists.lua` — `<leader>x` / `<leader>X` toggle the quickfix and location lists, which are separate and do not share commands.
 - `scrolling.lua` — `<C-d>`/`<C-u>` and `n`/`N` re-centre the cursor after moving.
+- `markdown.lua` — markdown reading. Buffers open as plain source; `<leader>mv` toggles the rendered view (render-markdown.nvim plus snacks.nvim inline images — Ghostty speaks the kitty graphics protocol, so images draw in the buffer), and `<leader>mp` opens markdown-preview.nvim in a browser for what the terminal cannot draw, i.e. mermaid and math. markdown-preview runs from its bundled node app, built once with `cd .../markdown-preview.nvim/app && yarn install`; the upstream prebuilt binary is unsigned and macOS refuses to exec it (`E903: Unknown system error -88`), so do not let `mkdp#util#install()` restore an `app/bin/` — it takes priority over the node path.
 
 **Other changes from stock kickstart:** relative line numbers; telescope `find_files` and `live_grep` show hidden files but exclude `.git/`; blink.cmp uses the `super-tab` preset plus `<CR>` to accept; neo-tree gets vim-style `h`/`l` folder navigation (stock leaves `h` unmapped and binds `l` to `focus_preview`).
 
@@ -99,16 +100,18 @@ Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → 
 
 | keys | action |
 | --- | --- |
-| `cmd+j` / `cmd+k` | previous / next tab |
-| `cmd+h` / `cmd+l` | previous / next split (cycles by split order) |
+| `cmd+h` / `cmd+l` | previous / next tab |
+| `cmd+j` / `cmd+k` | scroll the scrollback down / up |
 | `cmd+shift+hjkl` | new split left / down / up / right |
 | `cmd+opt+hjkl` | focus the split left / below / above / right (spatial) |
 | `cmd+ctrl+h` / `cmd+ctrl+l` | shrink / grow the focused split by 10 |
 | `cmd+ctrl+j` / `cmd+ctrl+k` | move the active tab left / right |
 
+Tabs moved to `h`/`l` so `j`/`k` could take scrollback, matching vim's vertical motion. Split *cycling* was dropped in the trade — `cmd+opt+hjkl` already focuses splits spatially, which is strictly better. Scrollback is bound as `text:` sending PgDn/PgUp rather than Ghostty's `scroll_page_down`/`scroll_page_up`: alt-screen TUIs (Claude Code, nvim) scroll themselves and ignore the terminal's own scrollback actions. Plain shell scrollback still answers to `shift+fn+up` / `shift+fn+down`.
+
 The VS Code analogue of `cmd+shift+hjkl` *moves* the editor into the group in that direction. Ghostty 1.3.1 has no move-surface-between-splits action, so these create a split instead — the closest available behavior.
 
-Ghostty defaults left in place: `cmd+t` new tab, `cmd+n` new window, `cmd+1`–`cmd+8` goto tab, `cmd+9` last tab, `cmd+opt+w` close tab, `cmd+shift+w` close window, `cmd+d` split right, `cmd+shift+enter` split zoom, `cmd+ctrl+=` equalize. `cmd+shift+d` (split down) is explicitly `unbind`-ed since `cmd+shift+j` owns that direction. Defaults and overrides merge — `ghostty +list-keybinds` prints the resolved set.
+Ghostty defaults left in place: `cmd+t` new tab, `cmd+n` new window, `cmd+1`–`cmd+8` goto tab, `cmd+9` last tab, `cmd+opt+w` close tab, `cmd+d` split right, `cmd+shift+enter` split zoom, `cmd+ctrl+=` equalize. Two defaults are explicitly `unbind`-ed: `cmd+shift+d` (split down) since `cmd+shift+j` owns that direction, and `cmd+shift+w` (close window) to free the key for a macOS App Shortcut on "Move Tab to New Window". Defaults and overrides merge — `ghostty +list-keybinds` prints the resolved set.
 
 Note `cmd+shift+[` / `cmd+shift+]` still switch tabs here as a Ghostty default, while [`vs_code/keybindings.json`](#vs_codekeybindingsjson) unbinds them.
 
@@ -120,6 +123,8 @@ defaults write com.mitchellh.ghostty NSUserKeyEquivalents \
 ```
 
 Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +validate-config`.
+
+**Telling tabs apart.** Ghostty 1.3.1 has no per-tab color: on macOS the tab bar inherits the surface background, so the only way to tint one tab is `OSC 11`, which repaints that tab's whole background. Colored backgrounds per project were tried and dropped — they fight the `tokyonight-night` theme the editor is matched to. What ships instead is a colored dot in the tab title, driven from the shell: [`fish/functions/fish_title.fish`](#functions) and [`ssh.fish`](#functions).
 
 ## `fish/`
 
@@ -138,6 +143,8 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`repos-diff [dir] [--full|-f]`** — review unmerged work across every repo under `dir` (default cwd), straight to the terminal. Per repo it diffs from the merge-base with `origin/HEAD`, so you see everything the branch added, committed or not — the same range a reviewer sees on the PR page — falling back to `HEAD` (uncommitted only) where there is no default branch. Clean repos and `_tmp` scratch dirs are skipped. Default output is a `--stat` summary; `--full` prints the whole diff.
 - **`repos-review [dir]`** — opens the Neovim panel above (`repo_diff.lua`) on `dir` (default cwd) in its own instance, so the scope is the shell's cwd rather than an editing session's. Pairs with **`repos-diff`**, which dumps the same changes to the terminal instead.
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
+- **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
+- **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.
 - **`repos-tomain`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm). Run inside a repo and it acts on that repo instead of its children.
 - **`repos-revert [dir] [--dry-run]`** — VS Code "Discard All Changes" across every repo under `dir` (default cwd). Commits and branches are never touched. Per repo it prompts separately for staged (`git restore --staged --worktree`), working tree (`git restore --worktree` + `git clean -fdx`), and — only once something was actually reverted there — stashes (`git stash clear`). Keys are `[y/N/a/i/q]`: `a` = yes to the rest of *this* repo, `i` = list the affected files then re-ask, `q` = quit the run. **`clean -fdx` also deletes gitignored files** (`bin/`, `obj/`, `.env`, …) with no git-side recovery — `--dry-run` previews exactly what each repo would lose. Paths in `$repos_revert_keep` (default `.codesearch.db`) are excluded; override with `set -g repos_revert_keep a b c`.
 

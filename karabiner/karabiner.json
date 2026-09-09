@@ -4,20 +4,6 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "cmd+h disable",
-                        "enabled": false,
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "h",
-                                    "modifiers": { "mandatory": ["command"] }
-                                },
-                                "to": [{ "key_code": "vk_none" }],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Change hyper+hjkl to arrow keys",
                         "manipulators": [
                             {

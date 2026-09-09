@@ -125,6 +125,8 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
+The `club2` ssh alias in the live `config.fish` is host-specific and deliberately not mirrored. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
+
 ### `config.fish`
 
 Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish autoloads each on first call).
@@ -142,16 +144,16 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 ### `conf.d/`
 
 - **`rustup.fish`** — rustup/cargo env (machine-generated).
+- **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will.
 
 ## `karabiner/karabiner.json`
 
-[Karabiner-Elements](https://karabiner-elements.pqrs.org) config. Three complex-modification rules in the default profile:
+[Karabiner-Elements](https://karabiner-elements.pqrs.org) config. Two complex-modification rules in the default profile:
 
 - **caps_lock → hyper / escape** — held, it's `ctrl+opt+shift`; tapped alone, `escape`.
 - **hyper+`hjkl` → arrow keys** — `ctrl+opt+shift+hjkl` sends left / down / up / right, so vim motions work in any app.
-- **`cmd+h` disable** — `"enabled": false`. Left in the file as a switch, not active.
 
-That last rule is off on purpose. `cmd+H` is not a system hotkey — it's a **Hide** menu item in each app's own App menu, so a Karabiner rule can only swallow the key globally, which would also block the `cmd+h` binding VS Code needs. Freeing it per app is [`NSUserKeyEquivalents`](#vs_codekeybindingsjson) instead. If you ever do want it dead everywhere *except* VS Code, enable the rule and scope it:
+A third rule disabling `cmd+h` was deleted rather than kept as a switch. `cmd+H` is not a system hotkey — it's a **Hide** menu item in each app's own App menu, so a Karabiner rule can only swallow the key globally, which would also block the `cmd+h` binding VS Code needs. Freeing it per app is [`NSUserKeyEquivalents`](#vs_codekeybindingsjson) instead. If you ever do want it dead everywhere *except* VS Code, enable the rule and scope it:
 
 ```json
 "conditions": [

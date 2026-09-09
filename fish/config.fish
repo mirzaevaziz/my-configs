@@ -17,3 +17,9 @@ zoxide init fish | source
 fzf --fish | source
 
 # repo helpers (repos-info, repos-syncall) autoload from functions/
+
+if not contains "/Users/aziz_mirzayev/.local/bin" $PATH
+    set -gx PATH "/Users/aziz_mirzayev/.local/bin" $PATH
+end
+
+eval (/opt/homebrew/bin/brew shellenv fish)

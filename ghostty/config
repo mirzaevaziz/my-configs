@@ -1,0 +1,58 @@
+# Ghostty configuration
+# Matched to Neovim's colorscheme: tokyonight-night (init.lua:398)
+
+theme = TokyoNight Night
+
+# Nerd Font, required for the icons kickstart draws
+font-family = JetBrainsMono Nerd Font
+font-size = 17
+
+# New windows open at font-size above, not the focused window's zoom level
+window-inherit-font-size = false
+
+# A little breathing room; tokyonight is a low-contrast theme
+window-padding-x = 8
+window-padding-y = 4
+
+# Keep the terminal out of the way -- nvim draws its own UI
+window-decoration = true
+macos-titlebar-style = tabs
+
+# ══ hjkl navigation — mirrors VS Code keybindings.json ═══════
+#
+#   cmd+hjkl        j/k traverse tabs, h/l cycle splits
+#   cmd+shift+hjkl  new split in that direction
+#   cmd+opt+hjkl    focus the split in that direction
+#   cmd+ctrl+h/l    resize the focused split; cmd+ctrl+j/k reorder tab
+#
+# cmd+h requires macOS "Hide" to be reassigned first, per machine:
+#   defaults write com.mitchellh.ghostty NSUserKeyEquivalents \
+#     -dict-add "Hide Ghostty" '@~^$h'
+
+# cmd+hjkl — tabs on j/k, splits on h/l
+keybind = super+h=goto_split:previous
+keybind = super+j=previous_tab
+keybind = super+k=next_tab
+keybind = super+l=goto_split:next
+
+# cmd+shift+hjkl — new split in that direction
+# (Ghostty has no "move surface to split"; creating one is the closest analog)
+keybind = super+shift+h=new_split:left
+keybind = super+shift+j=new_split:down
+keybind = super+shift+k=new_split:up
+keybind = super+shift+l=new_split:right
+
+# cmd+opt+hjkl — spatial split focus (arrows keep working too)
+keybind = super+alt+h=goto_split:left
+keybind = super+alt+j=goto_split:down
+keybind = super+alt+k=goto_split:up
+keybind = super+alt+l=goto_split:right
+
+# cmd+ctrl+h/l — resize; cmd+ctrl+j/k — move tab left/right
+keybind = super+ctrl+h=resize_split:left,10
+keybind = super+ctrl+l=resize_split:right,10
+keybind = super+ctrl+j=move_tab:-1
+keybind = super+ctrl+k=move_tab:1
+
+# super+shift+j owns split-down now
+keybind = super+shift+d=unbind

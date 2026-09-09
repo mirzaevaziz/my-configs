@@ -91,6 +91,36 @@ Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → 
 - `cmd+; cmd+l` — rerun last test (replaces default debug-last-run binding)
 - `ctrl+shift+alt+w` — close panel
 
+## `ghostty/config`
+
+[Ghostty](https://ghostty.org) terminal config. Mirror of `~/.config/ghostty/config`. Theme and font match Neovim's `tokyonight-night` and JetBrainsMono Nerd Font.
+
+**`hjkl` across four modifiers — mirrors [the VS Code layers](#vs_codekeybindingsjson):**
+
+| keys | action |
+| --- | --- |
+| `cmd+j` / `cmd+k` | previous / next tab |
+| `cmd+h` / `cmd+l` | previous / next split (cycles by split order) |
+| `cmd+shift+hjkl` | new split left / down / up / right |
+| `cmd+opt+hjkl` | focus the split left / below / above / right (spatial) |
+| `cmd+ctrl+h` / `cmd+ctrl+l` | shrink / grow the focused split by 10 |
+| `cmd+ctrl+j` / `cmd+ctrl+k` | move the active tab left / right |
+
+The VS Code analogue of `cmd+shift+hjkl` *moves* the editor into the group in that direction. Ghostty 1.3.1 has no move-surface-between-splits action, so these create a split instead — the closest available behavior.
+
+Ghostty defaults left in place: `cmd+t` new tab, `cmd+n` new window, `cmd+1`–`cmd+8` goto tab, `cmd+9` last tab, `cmd+opt+w` close tab, `cmd+shift+w` close window, `cmd+d` split right, `cmd+shift+enter` split zoom, `cmd+ctrl+=` equalize. `cmd+shift+d` (split down) is explicitly `unbind`-ed since `cmd+shift+j` owns that direction. Defaults and overrides merge — `ghostty +list-keybinds` prints the resolved set.
+
+Note `cmd+shift+[` / `cmd+shift+]` still switch tabs here as a Ghostty default, while [`vs_code/keybindings.json`](#vs_codekeybindingsjson) unbinds them.
+
+`cmd+h` only reaches Ghostty once macOS "Hide" is reassigned. Per machine, not synced by this repo:
+
+```sh
+defaults write com.mitchellh.ghostty NSUserKeyEquivalents \
+  -dict-add "Hide Ghostty" '@~^$h'
+```
+
+Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +validate-config`.
+
 ## `fish/`
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
@@ -127,7 +157,7 @@ That last rule is off on purpose. `cmd+H` is not a system hotkey — it's a **Hi
 "conditions": [
     {
         "type": "frontmost_application_unless",
-        "bundle_identifiers": ["^com\\.microsoft\\.VSCode$"]
+        "bundle_identifiers": ["^com\\.microsoft\\.VSCode$", "^com\\.mitchellh\\.ghostty$"]
     }
 ]
 ```

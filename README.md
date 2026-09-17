@@ -2,6 +2,16 @@
 
 Reference copies of my personal editor configs and agent skills. These are snapshots synced from my machine — not symlinked, so they may lag the live versions. Take whatever's useful.
 
+## `Brewfile` / `MANUAL_APPS.md`
+
+The full inventory of what's installed on this Mac.
+
+`Brewfile` is a `brew bundle dump` — taps, formulae and casks. Restore on a new machine with `brew bundle install`. VS Code extensions are deliberately excluded (`--no-vscode`): Settings Sync already carries them, and a second list just drifts.
+
+`MANUAL_APPS.md` covers the rest: apps in `/Applications` that Homebrew doesn't own, split into ones with a cask available (adopt with `brew install --cask --adopt <token>`), ones with no cask, MDM-managed work apps, and macOS built-ins.
+
+Refresh both with `./dump-packages.sh` — it rewrites `Brewfile` and prints the current manual list to reconcile against the notes in `MANUAL_APPS.md` by hand.
+
 ## `nvim/`
 
 Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickstart.nvim) fork, standalone only (the old `vscode-neovim` branching on `vim.g.vscode` is gone; VS Code now runs its own keybindings, see below). Plugins come from Neovim's built-in `vim.pack`, not `lazy.nvim`. Snapshot covers `init.lua`, the `lua/custom/plugins/` files, and the one kickstart plugin overridden (`neo-tree.lua`).

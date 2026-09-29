@@ -28,8 +28,6 @@ brew "fzf"
 brew "gh"
 # Tool for glamorous shell scripts
 brew "gum"
-# Agent multiplexer that lives in your terminal
-brew "herdr"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Lazier way to manage everything docker
@@ -80,8 +78,6 @@ brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-zimg"], trusted: true
 brew "pchuri/tap/confluence-cli", trusted: true
 # Display management tool
 cask "betterdisplay"
-# Terminal-based AI coding assistant
-cask "claude-code"
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
 # Developer platform

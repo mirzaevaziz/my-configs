@@ -1,6 +1,0 @@
-[keys]
-next_tab = ["prefix+n", "cmd+]"]
-previous_tab = ["prefix+p", "cmd+["]
-next_agent = "cmd+shift+]"
-previous_agent = "cmd+shift+["
-switch_tab = ["prefix+1..9", "cmd+shift+1..9"]

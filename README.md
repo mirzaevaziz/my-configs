@@ -23,7 +23,8 @@ Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickst
 **Custom plugins** — these replace the VS Code panels:
 
 - `git.lua` — `<leader>gg` opens lazygit in the repo of the *current file*, not Neovim's cwd, so a workspace holding several repos works unconfigured. Also `<leader>gr`/`gs`/`gc`/`gb`. Gutter and per-hunk actions come from gitsigns.
-- `repo_diff.lua` — the Source Control panel across *several* repos, which no git TUI does. `:RepoDiff [dir]` (or the `repos-review` fish function) lists every dirty repo under the cwd at depth 1 — the cwd itself if it is a repo, otherwise its direct children — as a tree of repo + changed files. `<CR>` opens the working copy against `HEAD` in a native side-by-side diff and hides the tree; `<leader>gt` toggles it back on the row you left; `R` rescans. Read-only: staging and committing stay in lazygit (`<leader>gg`), hunk actions in gitsigns, and `do` reverts a hunk from the `HEAD` side.
+- `repo_diff.lua` — the Source Control panel across *several* repos, which no git TUI does. `:RepoDiff [dir]`, `<leader>gd` (or the `repos-review` fish function) lists every dirty repo under the cwd at depth 1 — the cwd itself if it is a repo, otherwise its direct children — as a lazygit-style file tree: single-child directories squash into one row (`f` toggles), green = fully staged, red = work tree still differs. Keymaps follow diffview.nvim's file panel: `<CR>`/`l` open the working copy against `HEAD` in a native side-by-side diff and hide the tree, `o` previews without leaving it, `<Tab>`/`<S-Tab>` step files, `h`/`za`/`zR`/`zM` fold, `-`/`s` stage or unstage, `S`/`U` stage/unstage the whole repo, `X` discards a file (asks first), `R` rescans, `g?` help. `<leader>e` refocuses the tree on the row you left, `<leader>gt`/`<leader>b` toggle it. Committing stays in lazygit (`<leader>gg`), hunk actions in gitsigns.
+- `diffview.lua` — [diffview.nvim](https://github.com/sindrets/diffview.nvim) for the two things the multi-repo tree does not do: `<leader>gD` diffs the whole branch against `origin/main`, `<leader>gh` shows the current file's history. Single-repo only, so both first `tcd` to the repo of the current buffer. File-panel keys match `repo_diff.lua` (`<CR>`/`l` focus the diff, `o` previews).
 - `docker.lua` — `<leader>d*` docker compose commands, scoped the same way (nearest `compose.yaml` at or above the current file).
 - `flash.lua` — `f`/`F` jump and treesitter-node motions, `r`/`R` operators, `<C-s>` toggle in search. Char mode stays off so `t`/`T` remain stock vim.
 - `lists.lua` — `<leader>x` / `<leader>X` toggle the quickfix and location lists, which are separate and do not share commands.
@@ -86,9 +87,9 @@ Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → 
 - `ctrl+escape` — return focus from terminal to the editor
 - `cmd+r` (terminal focused) — rename the terminal tab (`workbench.action.terminal.rename`, no default binding)
 
-**Herdr compatibility:**
+**Freed keys:**
 
-- `shift+cmd+[` / `shift+cmd+]` — unbound from `previousEditor` / `nextEditor`, freed up for herdr's `previous_tab` / `next_tab`
+- `shift+cmd+[` / `shift+cmd+]` — unbound from `previousEditor` / `nextEditor`, originally freed for herdr's `previous_tab` / `next_tab` (herdr is gone; the keys stay unbound)
 
 **Views:**
 
@@ -165,10 +166,13 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 
 ## `karabiner/karabiner.json`
 
-[Karabiner-Elements](https://karabiner-elements.pqrs.org) config. Two complex-modification rules in the default profile:
+[Karabiner-Elements](https://karabiner-elements.pqrs.org) config. Three complex-modification rules in the default profile:
 
 - **caps_lock → hyper / escape** — held, it's `ctrl+opt+shift`; tapped alone, `escape`.
 - **hyper+`hjkl` → arrow keys** — `ctrl+opt+shift+hjkl` sends left / down / up / right, so vim motions work in any app.
+- **home row mods** — `f`/`d`/`s` held are left `cmd`/`opt`/`ctrl`, `j`/`k`/`l` the right-hand ones; tapped, the letter. Held means 150 ms (`basic.to_if_held_down_threshold_milliseconds`); another key inside that window cancels the hold and types the letter (`to_delayed_action.to_if_canceled`), so fast rolls stay letters. Listed after the hyper rule so `hyper+jkl` still reaches the arrows — Karabiner takes the first match.
+
+Trade-offs, accepted: the letter lands on key-up, holding a home-row key never auto-repeats it (scroll with `hyper+j`/`k`), and only one home-row modifier at a time — `f+d` does not stack into `cmd+opt`. Karabiner has no real hold-tap engine (no permissive-hold or roll detection); if misfires pile up, [kanata](https://github.com/jtroo/kanata)'s `tap-hold-release` with `tap-hold-require-prior-idle` is the upgrade path, but it replaces Karabiner-Elements entirely rather than running beside it.
 
 A third rule disabling `cmd+h` was deleted rather than kept as a switch. `cmd+H` is not a system hotkey — it's a **Hide** menu item in each app's own App menu, so a Karabiner rule can only swallow the key globally, which would also block the `cmd+h` binding VS Code needs. Freeing it per app is [`NSUserKeyEquivalents`](#vs_codekeybindingsjson) instead. If you ever do want it dead everywhere *except* VS Code, enable the rule and scope it:
 
@@ -191,25 +195,6 @@ Worth recording since it's invisible in the export:
 
 - Global hotkey — `cmd+space` (stored as `raycastGlobalHotkey = "Command-49"`).
 - Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
-
-## `herdr/config.toml`
-
-[Herdr](https://herdr.dev) keybindings (terminal multiplexer for coding agents).
-
-- `prefix+n` / `cmd+]` — next tab
-- `prefix+p` / `cmd+[` — previous tab
-- `cmd+shift+]` / `cmd+shift+[` — next / previous agent
-- `prefix+1..9` / `cmd+shift+1..9` — switch to tab N
-
-**macOS screenshot conflict:** `switch_tab`'s `cmd+shift+1..9` range includes `cmd+shift+3`, `cmd+shift+4`, and `cmd+shift+5` — macOS's default screenshot shortcuts (full screen, selection, Screenshot app). Those intercept the keystroke before herdr sees it, so tabs 3/4/5 won't switch. Fix: System Settings → Keyboard → Keyboard Shortcuts → Screenshots, and disable (or remap) "Save picture of screen as a file", "Save picture of selected area as a file", and "Screenshot and recording options".
-
-## `herdr/`
-
-[Herdr](https://herdr.dev) subagent wiring for Claude Code and pi.dev — how delegated/parallel work gets its own labeled herdr tab instead of an invisible in-process run.
-
-- **`skills/`** — snapshot of `~/.agents/skills/herdr` (the `herdr` skill Claude Code loads via `~/.claude/skills/herdr`, a symlink to that path). `SKILL.md` documents the routing rules; `scripts/claude_pane.py` and `scripts/pi_pane.py` are the one-call drivers that split a tab, start the agent, send the prompt, and harvest the result.
-- **`hooks/`** — snapshot of `~/.claude/hooks/herdr-subagent-redirect.sh` (a `PreToolUse` hook on `Task|Agent` that blocks Claude Code's in-process Agent tool under `HERDR_ENV=1` and tells the caller to use `claude_pane.py` instead) and `herdr-agent-state.sh` (`SessionStart` hook that drives herdr's tab-state tracking).
-- **`setup.sh`** — installs the above onto a fresh machine: copies the skill + scripts to `~/.agents/skills/herdr`, copies the hooks to `~/.claude/hooks/`, symlinks `~/.claude/skills/herdr -> ../../.agents/skills/herdr`, and `jq`-merges the two hook registrations into `~/.claude/settings.json` (idempotent — skips entries already present, leaves the rest of the file untouched). Requires `jq`.
 
 ## `skills/`
 

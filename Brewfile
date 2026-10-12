@@ -28,6 +28,8 @@ brew "fzf"
 brew "gh"
 # Tool for glamorous shell scripts
 brew "gum"
+# Review-first terminal diff viewer for agent-authored changesets
+brew "hunk"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Lazier way to manage everything docker

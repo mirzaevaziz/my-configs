@@ -14,7 +14,7 @@ Refresh both with `./dump-packages.sh` — it rewrites `Brewfile` and prints the
 
 ## `nvim/`
 
-Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickstart.nvim) fork, standalone only (the old `vscode-neovim` branching on `vim.g.vscode` is gone; VS Code now runs its own keybindings, see below). Plugins come from Neovim's built-in `vim.pack`, not `lazy.nvim`. Snapshot covers `init.lua`, the `lua/custom/plugins/` files, and the one kickstart plugin overridden (`neo-tree.lua`).
+Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickstart.nvim) fork, mainly standalone. Under `vscode-neovim` (`vim.g.vscode`), `init.lua` stops after options, keymaps and `flash.lua`: VS Code owns completion, LSP and UI, and a plugin like blink.cmp in the embedded instance only adds ways to break (a `brew upgrade` mid-session deletes the runtime it lazy-loads from). Plugins come from Neovim's built-in `vim.pack`, not `lazy.nvim`. Snapshot covers `init.lua`, the `lua/custom/plugins/` files, and the one kickstart plugin overridden (`neo-tree.lua`).
 
 **Language servers:** `ts_ls`, `eslint`, `basedpyright`, `ruff`, and `lua_ls`, installed via Mason. C# uses [`roslyn.nvim`](https://github.com/seblyng/roslyn.nvim) rather than the `servers` table — the Roslyn server speaks LSP extensions for solution loading that plain lspconfig cannot handle, and it needs the `roslyn-language-server` dotnet global tool on `$PATH`. OmniSharp is discontinued.
 
@@ -156,13 +156,14 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
 - **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
 - **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.
+- **`set-ado-pat [pat]`** — sets one Azure DevOps PAT as both `ADNOC_FEED_TOKEN` and `AZURE_DEVOPS_EXT_PAT`. Checks it against the ADO API first, so a bad paste never replaces a working token, then stores it as fish universal vars (`-Ux`), strips any copy from `secrets.fish` that would shadow them, and exports it in `~/.bashrc` / `~/.zshenv` for the other shells. Prompts silently if no argument is given.
 - **`repos-tomain`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm). Run inside a repo and it acts on that repo instead of its children.
 - **`repos-revert [dir] [--dry-run]`** — VS Code "Discard All Changes" across every repo under `dir` (default cwd). Commits and branches are never touched. Per repo it prompts separately for staged (`git restore --staged --worktree`), working tree (`git restore --worktree` + `git clean -fdx`), and — only once something was actually reverted there — stashes (`git stash clear`). Keys are `[y/N/a/i/q]`: `a` = yes to the rest of *this* repo, `i` = list the affected files then re-ask, `q` = quit the run. **`clean -fdx` also deletes gitignored files** (`bin/`, `obj/`, `.env`, …) with no git-side recovery — `--dry-run` previews exactly what each repo would lose. Paths in `$repos_revert_keep` (default `.codesearch.db`) are excluded; override with `set -g repos_revert_keep a b c`.
 
 ### `conf.d/`
 
 - **`rustup.fish`** — rustup/cargo env (machine-generated).
-- **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will.
+- **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will. The PAT itself is better set with `set-ado-pat`, which moves it out of this file.
 
 ## `karabiner/karabiner.json`
 
@@ -170,7 +171,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 
 - **caps_lock → hyper / escape** — held, it's `ctrl+opt+shift`; tapped alone, `escape`.
 - **hyper+`hjkl` → arrow keys** — `ctrl+opt+shift+hjkl` sends left / down / up / right, so vim motions work in any app.
-- **home row mods** — `f`/`d`/`s` held are left `cmd`/`opt`/`ctrl`, `j`/`k`/`l` the right-hand ones; tapped, the letter. Held means 150 ms (`basic.to_if_held_down_threshold_milliseconds`); another key inside that window cancels the hold and types the letter (`to_delayed_action.to_if_canceled`), so fast rolls stay letters. Listed after the hyper rule so `hyper+jkl` still reaches the arrows — Karabiner takes the first match.
+- **home row mods** (currently `"enabled": false`) — `f`/`d`/`s` held are left `cmd`/`opt`/`ctrl`, `j`/`k`/`l` the right-hand ones; tapped, the letter. Held means 150 ms (`basic.to_if_held_down_threshold_milliseconds`); another key inside that window cancels the hold and types the letter (`to_delayed_action.to_if_canceled`), so fast rolls stay letters. Listed after the hyper rule so `hyper+jkl` still reaches the arrows — Karabiner takes the first match.
 
 Trade-offs, accepted: the letter lands on key-up, holding a home-row key never auto-repeats it (scroll with `hyper+j`/`k`), and only one home-row modifier at a time — `f+d` does not stack into `cmd+opt`. Karabiner has no real hold-tap engine (no permissive-hold or roll detection); if misfires pile up, [kanata](https://github.com/jtroo/kanata)'s `tap-hold-release` with `tap-hold-require-prior-idle` is the upgrade path, but it replaces Karabiner-Elements entirely rather than running beside it.
 

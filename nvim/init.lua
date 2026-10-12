@@ -253,6 +253,11 @@ do
   })
 end
 
+-- VS Code owns completion, LSP and UI; embedded nvim keeps only options, keymaps and flash.
+-- Loaded here so VS Code gets it too; the custom.plugins loop later re-requires it as a no-op.
+require 'custom.plugins.flash'
+if vim.g.vscode then return end
+
 -- ============================================================
 -- SECTION 3: PLUGIN MANAGER INTRO
 -- vim.pack intro, build hooks

@@ -292,6 +292,45 @@
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active",
   },
+  // cmd+[/] — previous/next change inside a diff editor
+  {
+    "key": "cmd+]",
+    "command": "workbench.action.compareEditor.nextChange",
+    "when": "isInDiffEditor && !terminalFocus",
+  },
+  {
+    "key": "cmd+[",
+    "command": "workbench.action.compareEditor.previousChange",
+    "when": "isInDiffEditor && !terminalFocus",
+  },
+  // cmd+shift+[/] — previous/next file in the Source Control list (no built-in
+  // command, so step the SCM tree from its focused row and refocus the editor)
+  {
+    "key": "shift+cmd+]",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.view.scm",
+        "list.focusDown",
+        "list.select",
+        "workbench.action.focusActiveEditorGroup",
+      ],
+    },
+    "when": "isInDiffEditor && !terminalFocus",
+  },
+  {
+    "key": "shift+cmd+[",
+    "command": "runCommands",
+    "args": {
+      "commands": [
+        "workbench.view.scm",
+        "list.focusUp",
+        "list.select",
+        "workbench.action.focusActiveEditorGroup",
+      ],
+    },
+    "when": "isInDiffEditor && !terminalFocus",
+  },
 
   // Testing Shortcuts
   // Override pair: old debug key -> rerun last test

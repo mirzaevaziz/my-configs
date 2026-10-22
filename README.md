@@ -89,7 +89,12 @@ Then fully quit VS Code (`cmd+Q`) and reopen. Equivalent to System Settings → 
 
 **Freed keys:**
 
-- `shift+cmd+[` / `shift+cmd+]` — unbound from `previousEditor` / `nextEditor`, originally freed for herdr's `previous_tab` / `next_tab` (herdr is gone; the keys stay unbound)
+- `shift+cmd+[` / `shift+cmd+]` — unbound from `previousEditor` / `nextEditor`, originally freed for herdr's `previous_tab` / `next_tab` (herdr is gone); now used only inside diff editors, see below
+
+**Diff editor** (`isInDiffEditor`):
+
+- `cmd+]` / `cmd+[` — next / previous change
+- `shift+cmd+]` / `shift+cmd+[` — next / previous file in the Source Control list. No built-in command, so a `runCommands` chain focuses the SCM view, steps the list, opens the row and refocuses the editor
 
 **Views:**
 

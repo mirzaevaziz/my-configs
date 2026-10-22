@@ -44,6 +44,8 @@ brew "tree-sitter"
 brew "neovim"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
+# Swiss-army knife of markup format conversion
+brew "pandoc"
 # Command-line shell and scripting language
 brew "powershell"
 # Implementation of Telnet and SSH

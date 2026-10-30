@@ -1,0 +1,86 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "auto_install_extensions": {
+    "csharp": true
+  },
+  // Samsung's official osx-arm64 build, instead of the extension's fork download
+  "dap": {
+    "netcoredbg": {
+      "binary": "/Users/aziz_mirzayev/.local/share/netcoredbg/netcoredbg"
+    }
+  },
+  "debugger": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "tree_view": true,
+    "dock": "left",
+    "entry_primary_click_action": "file_diff"
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "button": false,
+    "threads_sidebar": {
+      "position": "right"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "vim_mode": true,
+  "terminal": {
+    "font_size": 16.0,
+    "font_family": "JetBrainsMono Nerd Font Mono"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "diff_view_style": "split",
+  "relative_line_numbers": "enabled",
+  "gutter": {
+    "line_numbers": true
+  },
+  "minimap": {
+    "show": "never"
+  },
+  "hover_popover_delay": 1000,
+  "current_line_highlight": "all",
+  "window_title_format": "${fileName}${separator}${projectName}",
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "colorize_brackets": true,
+  "linked_edits": true,
+  "show_whitespaces": "trailing",
+  "format_on_save": "on",
+  "soft_wrap": "editor_width",
+  "base_keymap": "VSCode",
+  "ui_font_size": 16,
+  "buffer_font_size": 16.0,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha",
+  },
+  // Tokyo Night defines no terminal foreground, so Zed fell back to near-white
+  "theme_overrides": {
+    "Tokyo Night": {
+      "terminal.foreground": "#a9b1d6",
+    },
+  },
+}

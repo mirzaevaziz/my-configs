@@ -191,6 +191,12 @@ A third rule disabling `cmd+h` was deleted rather than kept as a switch. `cmd+H`
 ]
 ```
 
+## `zed/`
+
+[Zed](https://zed.dev) `settings.json` and `keymap.json`, from `~/.config/zed/`. Vim mode on a VS Code base keymap; the keymap ports `vs_code/keybindings.json` (hjkl pane/tab movement, `cmd-enter` terminal toggle) and says in its header comment how Zed's precedence differs from VS Code's.
+
+**Git Panel opens file diffs, not the project diff.** `git_panel.entry_primary_click_action: "file_diff"` covers the click; `enter` is separate and is rebound to `menu::SecondaryConfirm` in `GitPanel && ChangesList` — that, not `git::OpenFileDiff` (which diffs the active editor's file), is the panel's own "Open File Diff". Stock Zed puts it on `cmd-enter`, which the global terminal toggle takes. `diff_view_style: "split"` makes the diffs side by side.
+
 ## Raycast (not versioned)
 
 Nothing to commit — Raycast keeps its state in an encrypted `raycast-enc.sqlite` plus a `com.raycast.macos` plist that's mostly machine-local noise (per-monitor window position caches, analytics IDs, migration dates). None of it diffs or transplants.

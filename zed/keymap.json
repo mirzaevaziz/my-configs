@@ -1,0 +1,126 @@
+// Ported from VS Code keybindings.json.
+//
+// Precedence: a binding with no context matches at the deepest level, so the
+// first block beats every default (same as a VS Code binding with no `when`).
+// Context blocks below it match the focused element at that same depth and win
+// the tie by coming later in the file.
+//
+// Unlike VS Code, a user binding outranks any default chord it prefixes, so
+// cmd-k fires instantly and the default `cmd-k …` chords are gone (command
+// palette still reaches them).
+[
+  {
+    "bindings": {
+      // hjkl on four modifiers
+      //   cmd        j/k traverse tabs, h/l cycle panes
+      //   cmd-shift  move the tab to the pane in that direction
+      //   cmd-alt    focus the pane in that direction
+      //   cmd-ctrl   h/l resize the pane, j/k reorder the tab
+      "cmd-h": "workspace::ActivatePreviousPane",
+      "cmd-j": "pane::ActivatePreviousItem",
+      "cmd-k": "pane::ActivateNextItem",
+      "cmd-l": "workspace::ActivateNextPane",
+      "cmd-shift-h": ["workspace::MoveItemToPaneInDirection", { "direction": "left" }],
+      "cmd-shift-j": ["workspace::MoveItemToPaneInDirection", { "direction": "down" }],
+      "cmd-shift-k": ["workspace::MoveItemToPaneInDirection", { "direction": "up" }],
+      "cmd-shift-l": ["workspace::MoveItemToPaneInDirection", { "direction": "right" }],
+      "cmd-alt-h": "workspace::ActivatePaneLeft",
+      "cmd-alt-j": "workspace::ActivatePaneDown",
+      "cmd-alt-k": "workspace::ActivatePaneUp",
+      "cmd-alt-l": "workspace::ActivatePaneRight",
+      // ponytail: center panes only; VS Code also resized the sidebar
+      "cmd-ctrl-h": "vim::ResizePaneLeft",
+      "cmd-ctrl-l": "vim::ResizePaneRight",
+      "cmd-ctrl-j": "pane::SwapItemLeft",
+      "cmd-ctrl-k": "pane::SwapItemRight",
+      "cmd-alt-f": "workspace::ToggleZoom",
+      // ponytail: centered layout is Zed's nearest to zen mode
+      "cmd-alt-z": "workspace::ToggleCenteredLayout",
+
+      // Terminal
+      "cmd-enter": "terminal_panel::Toggle",
+      "cmd-ctrl-enter": "workspace::ToggleZoom",
+      "cmd-shift-enter": "workspace::NewCenterTerminal",
+
+      // Panels
+      "cmd-e": "project_panel::ToggleFocus",
+      "cmd-m": "git_panel::ToggleFocus",
+      "cmd-shift-m": "git::Diff",
+
+      "cmd-; cmd-l": "task::Rerun",
+      "cmd-shift-s": null,
+    },
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-shift-d": "editor::DuplicateSelection",
+      "ctrl-shift-p": "editor::ShowSignatureHelp",
+    },
+  },
+  {
+    // ponytail: nearest to flash.nvim
+    "context": "vim_mode == normal || vim_mode == visual",
+    "bindings": {
+      "g w": "vim::HelixJumpToWord",
+    },
+  },
+  {
+    "context": "Editor && showing_completions",
+    "bindings": {
+      "cmd-j": "editor::ContextMenuNext",
+      "cmd-k": "editor::ContextMenuPrevious",
+    },
+  },
+  {
+    "context": "Picker > Editor",
+    "bindings": {
+      "cmd-j": "menu::SelectNext",
+      "cmd-k": "menu::SelectPrevious",
+    },
+  },
+  {
+    // cmd-shift-h went to tab moving; keep replace reachable as VS Code did
+    "context": "BufferSearchBar > Editor",
+    "bindings": {
+      "cmd-alt-f": "search::ToggleReplace",
+    },
+  },
+  {
+    "context": "GitDiff > Editor",
+    "bindings": {
+      "cmd-[": "editor::GoToPreviousHunk",
+      "cmd-]": "editor::GoToHunk",
+      // ponytail: steps excerpts, not files; a file with several hunks has several
+      "cmd-shift-[": "editor::MoveToStartOfExcerpt",
+      "cmd-shift-]": "editor::MoveToStartOfNextExcerpt",
+    },
+  },
+  {
+    // the global cmd-enter would otherwise take commit away
+    "context": "(CommitEditor > Editor) || (GitCommit > Editor)",
+    "bindings": {
+      "cmd-enter": "git::Commit",
+      "cmd-shift-enter": "git::Amend",
+    },
+  },
+  {
+    // match the click, which opens a file diff via entry_primary_click_action
+    "context": "GitPanel && ChangesList",
+    "bindings": {
+      // the panel's own file diff; git::OpenFileDiff diffs the active editor's file instead
+      "enter": "menu::SecondaryConfirm",
+    },
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "shift-enter": ["terminal::SendText", "\u001b\r"],
+      "cmd-d": "workspace::NewTerminal",
+      "cmd-r": "terminal::RenameTerminal",
+      "cmd-[": "pane::ActivatePreviousItem",
+      "cmd-]": "pane::ActivateNextItem",
+      "ctrl-escape": "workspace::FocusCenterPane",
+    },
+  },
+]

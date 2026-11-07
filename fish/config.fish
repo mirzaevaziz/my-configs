@@ -9,8 +9,8 @@ end
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
 set -gx DOTNET_CLI_UI_LANGUAGE en
-alias claude='claude --dangerously-skip-permissions'
-alias copilot='copilot --no-ask-user --sync-session off --disable-builtin-mcps --yolo'
+alias ca='claude --dangerously-skip-permissions'
+alias co='copilot --no-ask-user --sync-session off --disable-builtin-mcps --yolo'
 
 # nav tools (Lesson 03)
 zoxide init fish | source

@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
   "auto_install_extensions": {
     "csharp": true
   },
@@ -20,9 +21,9 @@
     "dock": "left"
   },
   "git_panel": {
+    "group_by": "staging",
     "tree_view": true,
-    "dock": "left",
-    "entry_primary_click_action": "file_diff"
+    "dock": "left"
   },
   "project_panel": {
     "dock": "left"
@@ -52,7 +53,7 @@
       "enabled": false
     }
   },
-  "diff_view_style": "split",
+  "diff_view_style": "unified",
   "relative_line_numbers": "enabled",
   "gutter": {
     "line_numbers": true

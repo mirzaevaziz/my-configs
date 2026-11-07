@@ -25,6 +25,7 @@ never brewed. Adopting is only worth it for the one-command restore on a new Mac
 | Telegram | `telegram` | yes |
 | Visual Studio Code | `visual-studio-code` | yes |
 | Windows App | `windows-app` | yes |
+| Zed | `zed` | yes |
 | Яндекс Музыка | `yandex-music` | yes |
 
 ## Manually downloaded, no cask

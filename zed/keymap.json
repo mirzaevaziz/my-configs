@@ -105,18 +105,10 @@
     },
   },
   {
-    // match the click, which opens a file diff via entry_primary_click_action
-    "context": "GitPanel && ChangesList",
-    "bindings": {
-      // the panel's own file diff; git::OpenFileDiff diffs the active editor's file instead
-      "enter": "menu::SecondaryConfirm",
-    },
-  },
-  {
     "context": "Terminal",
     "bindings": {
       "shift-enter": ["terminal::SendText", "\u001b\r"],
-      "cmd-d": "workspace::NewTerminal",
+      "cmd-n": "workspace::NewFile",
       "cmd-r": "terminal::RenameTerminal",
       "cmd-[": "pane::ActivatePreviousItem",
       "cmd-]": "pane::ActivateNextItem",

@@ -146,7 +146,7 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
-The `club2` ssh alias in the live `config.fish` is host-specific and deliberately not mirrored. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
+The `club2` ssh alias in the live `config.fish` is host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
 
 ### `config.fish`
 
@@ -159,6 +159,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`repos-diff [dir] [--full|-f]`** — review unmerged work across every repo under `dir` (default cwd), straight to the terminal. Per repo it diffs from the merge-base with `origin/HEAD`, so you see everything the branch added, committed or not — the same range a reviewer sees on the PR page — falling back to `HEAD` (uncommitted only) where there is no default branch. Clean repos and `_tmp` scratch dirs are skipped. Default output is a `--stat` summary; `--full` prints the whole diff.
 - **`repos-review [dir]`** — opens the Neovim panel above (`repo_diff.lua`) on `dir` (default cwd) in its own instance, so the scope is the shell's cwd rather than an editing session's. Pairs with **`repos-diff`**, which dumps the same changes to the terminal instead.
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
+- **`rcm-repos-upd`** — `z ai` then `repos-syncall`: jump to the recruitment workspace and pull every repo in it.
 - **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
 - **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.
 - **`set-ado-pat [pat]`** — sets one Azure DevOps PAT as both `ADNOC_FEED_TOKEN` and `AZURE_DEVOPS_EXT_PAT`. Checks it against the ADO API first, so a bad paste never replaces a working token, then stores it as fish universal vars (`-Ux`), strips any copy from `secrets.fish` that would shadow them, and exports it in `~/.bashrc` / `~/.zshenv` for the other shells. Prompts silently if no argument is given.
@@ -195,7 +196,9 @@ A third rule disabling `cmd+h` was deleted rather than kept as a switch. `cmd+H`
 
 [Zed](https://zed.dev) `settings.json` and `keymap.json`, from `~/.config/zed/`. Vim mode on a VS Code base keymap; the keymap ports `vs_code/keybindings.json` (hjkl pane/tab movement, `cmd-enter` terminal toggle) and says in its header comment how Zed's precedence differs from VS Code's.
 
-**Git Panel opens file diffs, not the project diff.** `git_panel.entry_primary_click_action: "file_diff"` covers the click; `enter` is separate and is rebound to `menu::SecondaryConfirm` in `GitPanel && ChangesList` — that, not `git::OpenFileDiff` (which diffs the active editor's file), is the panel's own "Open File Diff". Stock Zed puts it on `cmd-enter`, which the global terminal toggle takes. `diff_view_style: "split"` makes the diffs side by side.
+Git Panel is a tree grouped by staging state (`git_panel.group_by: "staging"`); diffs are unified (`diff_view_style: "unified"`). `cli_default_open_behavior: "new_window"` makes `zed <path>` open its own window instead of joining the last one. In the terminal, `cmd-n` is a new file rather than a new terminal.
+
+The `ssh_connections` block in the live `settings.json` is host-specific and deliberately not mirrored, same as the fish `club2` alias.
 
 ## Raycast (not versioned)
 
@@ -206,7 +209,20 @@ To move it to a new machine: **Raycast Settings → Advanced → Export Settings
 Worth recording since it's invisible in the export:
 
 - Global hotkey — `cmd+space` (stored as `raycastGlobalHotkey = "Command-49"`).
+- Store extensions (from `~/.config/raycast/extensions/*/package.json`): Ollama AI, Google Translate, Oxford Collocation Dictionary, Iconify, UUID Generator, Svgl, DevUtils, Visual Studio Code, Kill Process, Google Chrome, Change Case, Pomodoro, Password Generator.
 - Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
+
+## `vorssaint/com.vorssaint.utils.plist`
+
+Vorssaint menu-bar utility settings — the `com.vorssaint.utils` defaults domain, with machine-local keys stripped: status-item positions, update and what's-new bookkeeping, `*Migrated` flags, onboarding state, last-used screenshot tool, settings window size, DDC brightness paths (they name this Mac's `IOService` display tree), fan-helper hash, the command-bar habit key and the shelf contents. What's left is the feature toggles (`featureAvailable.*`), menu-bar metrics, monitor alerts, notch layout, auto-quit exceptions, screenshot/recorder shortcuts and keep-awake.
+
+Restore on a new machine with Vorssaint quit:
+
+```sh
+defaults import com.vorssaint.utils vorssaint/com.vorssaint.utils.plist
+```
+
+`defaults import` replaces the whole domain, so only run it on a fresh install. Re-sync by re-exporting the domain (`plistlib` load, drop the keys above, dump sorted) — the diff then shows only real setting changes.
 
 ## `skills/`
 

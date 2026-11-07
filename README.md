@@ -212,6 +212,27 @@ Worth recording since it's invisible in the export:
 - Store extensions (from `~/.config/raycast/extensions/*/package.json`): Ollama AI, Google Translate, Oxford Collocation Dictionary, Iconify, UUID Generator, Svgl, DevUtils, Visual Studio Code, Kill Process, Google Chrome, Change Case, Pomodoro, Password Generator.
 - Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
 
+## `macos/defaults.sh`
+
+macOS settings changed from stock, as `defaults write` commands. Run it on a fresh Mac, then log out and back in. It is safe to re-run.
+
+- **Look:** Dark mode, scroll bars always shown, font smoothing off, tighter menu-bar icon spacing (`NSStatusItemSpacing` 6) so more fit beside the notch.
+- **Keyboard:** F1–F12 are standard function keys. No popup when switching input source.
+- **Trackpad:** tap to click, natural scrolling off, no two-finger swipe back/forward.
+- **Windows:** double-clicking a title bar does not minimize, tiled windows have no margins, desktop icons hidden (`WindowManager HideDesktop`).
+- **Dock:** auto-hide, on the left, icon size 47. Finder opens in list view.
+- **App Shortcuts:** "Hide Visual Studio Code" and "Hide Ghostty" are moved to `cmd+opt+ctrl+shift+h`, which frees `cmd+h` (see [VS Code](#vs_codekeybindingsjson)). Ghostty's "Move Tab to New Window" goes on `cmd+shift+w`.
+- **System shortcuts:** Spotlight `cmd+space` is off because Raycast owns it. The screenshot shortcuts are off because Vorssaint owns them. Previous input source is moved to `shift+ctrl+opt+p` and next input source is off. Show Desktop (F11), Quick Note (`fn+q`) and a few others are off. Entries are written as raw `AppleSymbolicHotKeys` XML so number and bool types survive; the old-style `{ enabled = 0; }` form stores them as strings.
+
+Not scripted, set these by hand:
+
+- **Input sources:** ABC, Russian – PC, Uzbek (Cyrillic). `defaults` cannot reliably add keyboard layouts.
+- **Dock apps:** stored as file bookmarks that only work on this Mac.
+- **Text replacements:** come through iCloud.
+- **Language and region:** English (Uzbekistan), then Russian and Uzbek Cyrillic.
+
+To re-sync, read each key back with `defaults read` (or `defaults -currentHost read` for per-host keys) and regenerate the `hk` lines from `defaults export com.apple.symbolichotkeys -`.
+
 ## `claude/settings.json`
 
 Global Claude Code settings, copied from `~/.claude/settings.json`.

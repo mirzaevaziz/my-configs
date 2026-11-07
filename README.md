@@ -212,6 +212,13 @@ Worth recording since it's invisible in the export:
 - Store extensions (from `~/.config/raycast/extensions/*/package.json`): Ollama AI, Google Translate, Oxford Collocation Dictionary, Iconify, UUID Generator, Svgl, DevUtils, Visual Studio Code, Kill Process, Google Chrome, Change Case, Pomodoro, Password Generator.
 - Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
 
+## `claude-hud/`
+
+[claude-hud](https://github.com/jarrodwatts/claude-hud) status line for Claude Code. Install the plugin (`/plugin marketplace add jarrodwatts/claude-hud`, then enable `claude-hud@claude-hud`), then:
+
+- `config.json` goes to `~/.claude/plugins/claude-hud/config.json`. Expanded layout with everything on: tools, agents, todos, token breakdown, speed, usage, effort and git ahead/behind.
+- `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is hardcoded to `/opt/homebrew/bin/node`.
+
 ## `vorssaint/com.vorssaint.utils.plist`
 
 Vorssaint menu-bar utility settings — the `com.vorssaint.utils` defaults domain, with machine-local keys stripped: status-item positions, update and what's-new bookkeeping, `*Migrated` flags, onboarding state, last-used screenshot tool, settings window size, DDC brightness paths (they name this Mac's `IOService` display tree), fan-helper hash, the command-bar habit key and the shelf contents. What's left is the feature toggles (`featureAvailable.*`), menu-bar metrics, monitor alerts, notch layout, auto-quit exceptions, screenshot/recorder shortcuts and keep-awake.

@@ -212,6 +212,18 @@ Worth recording since it's invisible in the export:
 - Store extensions (from `~/.config/raycast/extensions/*/package.json`): Ollama AI, Google Translate, Oxford Collocation Dictionary, Iconify, UUID Generator, Svgl, DevUtils, Visual Studio Code, Kill Process, Google Chrome, Change Case, Pomodoro, Password Generator.
 - Per-command hotkeys live in the encrypted sqlite. When a keybinding elsewhere mysteriously stops firing, check Raycast Settings → Extensions and sort by the hotkey column — window-management commands like to sit on `cmd+ctrl` and `cmd+opt`, which is exactly where [the VS Code `hjkl` layers](#vs_codekeybindingsjson) live.
 
+## `claude/settings.json`
+
+Global Claude Code settings, copied from `~/.claude/settings.json`.
+
+- **Model:** Opus at `high` effort, `latest` update channel, `dark-ansi` theme.
+- **Permissions:** `auto` default mode, with the permission prompts for auto and dangerous mode skipped. Edits under `.claude/skills/` are always allowed. Tools denied: plan mode, `AskUserQuestion`, cron, `SendMessage`, notebooks and a few others.
+- **Off:** claude.ai connectors, bundled skills, workflows, artifacts.
+- **Plugins:** `caveman`, `ponytail` and [`claude-hud`](#claude-hud), each with its GitHub marketplace listed so a fresh machine can install them.
+- **Hooks and status line:** a `SessionStart` hook runs `~/.local/bin/jcode setup-hotkey`, which is a hardcoded path, so drop it if jcode is not installed. The status line points at the claude-hud wrapper below.
+
+`settings.local.json` (one-off `Bash` allows) and the `settings.json.bak*` files are not mirrored.
+
 ## `claude-hud/`
 
 [claude-hud](https://github.com/jarrodwatts/claude-hud) status line for Claude Code. Install the plugin (`/plugin marketplace add jarrodwatts/claude-hud`, then enable `claude-hud@claude-hud`), then:

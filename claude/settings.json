@@ -1,0 +1,89 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(.claude/skills/)"
+    ],
+    "deny": [
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "DesignSync",
+      "NotebookEdit",
+      "SendMessage",
+      "PushNotification",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "AskUserQuestion",
+      "CronCreate",
+      "CronDelete",
+      "CronList"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "disableClaudeAiConnectors": true,
+  "disableBundledSkills": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/aziz_mirzayev/.local/bin/jcode' setup-hotkey --notify-cli-launch claude",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "disableWorkflows": true,
+  "disableArtifact": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""
+  },
+  "enabledPlugins": {
+    "caveman@caveman": true,
+    "claude-hud@claude-hud": true,
+    "ponytail@ponytail": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-ansi",
+  "switchModelsOnFlag": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Edit(.claude/skills/)"
+    ]
+  }
+}

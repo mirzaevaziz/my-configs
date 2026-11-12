@@ -106,5 +106,7 @@ cask "notunes"
 cask "obs"
 # Open source virtual/remote desktop application
 cask "rustdesk"
+# Mesh VPN based on WireGuard
+cask "tailscale-app"
 npm "@earendil-works/pi-coding-agent"
 npm "yarn"

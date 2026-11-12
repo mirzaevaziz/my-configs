@@ -215,6 +215,17 @@ Git Panel is a tree grouped by staging state (`git_panel.group_by: "staging"`); 
 
 The `ssh_connections` block in the live `settings.json` is host-specific and deliberately not mirrored, same as the fish `club2` / `abha` aliases.
 
+## SSH to the VPS over Tailscale (not versioned)
+
+The VPS accepts SSH only on its `tailscale0` interface; public port 22 is closed by ufw. `~/.ssh/config` and `~/.ssh/known_hosts` stay out of this public repo, so set up each Mac by hand:
+
+1. Install Tailscale (`cask "tailscale-app"` in the `Brewfile`), open it, approve the VPN prompt, and sign in to the same tailnet.
+2. In `~/.ssh/config`, set the VPS host block's `HostName` to the server's Tailscale IP (`tailscale ip -4` on the server, or `tailscale status` on any Mac in the tailnet).
+3. `known_hosts`: SSH stores host keys per name/IP, so the new Tailscale address is unknown and SSH asks to trust it. Don't type `yes` blindly. Get the known-good fingerprint from an entry already trusted: `ssh-keygen -lF <public-ip>` on this Mac (it trusted the old address), or `ssh-keygen -lF <tailscale-ip>` on a Mac already set up. Accept only if the prompt shows the same `ED25519 SHA256:…` value. The old public-IP entry can be removed with `ssh-keygen -R <public-ip>`.
+4. Test with `ssh <host-alias> hostname`.
+
+The server's node has Tailscale key expiry disabled in the admin console; otherwise it drops off the tailnet after 180 days and SSH is only reachable through the provider's web console.
+
 ## Raycast (not versioned)
 
 Nothing to commit — Raycast keeps its state in an encrypted `raycast-enc.sqlite` plus a `com.raycast.macos` plist that's mostly machine-local noise (per-monitor window position caches, analytics IDs, migration dates). None of it diffs or transplants.

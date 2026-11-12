@@ -16,6 +16,7 @@ Refresh both with `./dump-packages.sh` — it rewrites `Brewfile` and prints the
 
 ```sh
 brew tap-new --no-git local/dotnet
+mkdir -p "$(brew --repository)/Library/Taps/local/homebrew-dotnet/Casks"
 cp brew/Casks/dotnet-sdk@10.rb "$(brew --repository)/Library/Taps/local/homebrew-dotnet/Casks/"
 brew trust local/dotnet
 ```

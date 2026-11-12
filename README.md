@@ -2,7 +2,7 @@
 
 Reference copies of my personal editor configs and agent skills. These are snapshots synced from my machine — not symlinked, so they may lag the live versions. Take whatever's useful.
 
-**Paths must resolve on the local Mac.** Two Macs with different usernames sync this repo, so never hardcode `/Users/<name>`. Use `$HOME` or `~` instead, and check that the tool expands them (Zed's netcoredbg `binary` takes `~`, and the Claude hook runs through a shell, so `$HOME` works there). Always `git pull` before syncing, because the other Mac pushes too.
+**Paths must resolve on the local Mac.** Two Macs with different usernames sync this repo, so never hardcode `/Users/<name>`. Use `$HOME` or `~` instead, and check that the tool expands them (Zed's netcoredbg `binary` uses `~`, not yet verified in a debug session; and the Claude hook runs through a shell, so `$HOME` works there). Always `git pull` before syncing, because the other Mac pushes too.
 
 ## `Brewfile` / `MANUAL_APPS.md`
 

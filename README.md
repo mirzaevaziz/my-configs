@@ -156,7 +156,7 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
-The `club2` ssh alias in the live `config.fish` is host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
+The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
 
 ### `config.fish`
 
@@ -179,7 +179,8 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 
 ### `conf.d/`
 
-- **`rustup.fish`** — rustup/cargo env (machine-generated).
+- **`rustup.fish`** — rustup/cargo env (machine-generated), guarded with `test -f` so a machine without rustup starts clean.
+- **`shell.fish`** — exports `SHELL=/opt/homebrew/bin/fish`. Fish does not set `$SHELL` itself, so tools that spawn "your shell" (Raycast, Zed's `"shell": "system"` terminal) would otherwise get the login default.
 - **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will. The PAT itself is better set with `set-ado-pat`, which moves it out of this file.
 
 ## `karabiner/karabiner.json`
@@ -209,7 +210,7 @@ A third rule disabling `cmd+h` was deleted rather than kept as a switch. `cmd+H`
 
 Git Panel is a tree grouped by staging state (`git_panel.group_by: "staging"`); diffs are unified (`diff_view_style: "unified"`). `cli_default_open_behavior: "new_window"` makes `zed <path>` open its own window instead of joining the last one. In the terminal, `cmd-n` is a new file rather than a new terminal.
 
-The `ssh_connections` block in the live `settings.json` is host-specific and deliberately not mirrored, same as the fish `club2` alias.
+The `ssh_connections` block in the live `settings.json` is host-specific and deliberately not mirrored, same as the fish `club2` / `abha` aliases.
 
 ## Raycast (not versioned)
 
@@ -261,7 +262,7 @@ Global Claude Code settings, copied from `~/.claude/settings.json`.
 [claude-hud](https://github.com/jarrodwatts/claude-hud) status line for Claude Code. Install the plugin (`/plugin marketplace add jarrodwatts/claude-hud`, then enable `claude-hud@claude-hud`), then:
 
 - `config.json` goes to `~/.claude/plugins/claude-hud/config.json`. Expanded layout with everything on: tools, agents, todos, token breakdown, speed, usage, effort and git ahead/behind.
-- `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is hardcoded to `/opt/homebrew/bin/node`.
+- `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is `/opt/homebrew/bin/node`, falling back to the newest `~/.nvm` node when Homebrew's is missing.
 
 ## `vorssaint/com.vorssaint.utils.plist`
 

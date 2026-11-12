@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/aziz_mirzayev/.local/bin/jcode' setup-hotkey --notify-cli-launch claude",
+            "command": "\"$HOME/.local/bin/jcode\" setup-hotkey --notify-cli-launch claude",
             "timeout": 5
           }
         ]

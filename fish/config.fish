@@ -18,8 +18,8 @@ fzf --fish | source
 
 # repo helpers (repos-info, repos-syncall) autoload from functions/
 
-if not contains "/Users/aziz_mirzayev/.local/bin" $PATH
-    set -gx PATH "/Users/aziz_mirzayev/.local/bin" $PATH
+if not contains "$HOME/.local/bin" $PATH
+    set -gx PATH "$HOME/.local/bin" $PATH
 end
 
 eval (/opt/homebrew/bin/brew shellenv fish)

@@ -8,7 +8,10 @@ cols=${cols:-${COLUMNS:-120}}
 export COLUMNS=$(( cols > 4 ? cols - 4 : 1 ))
 plugin_dir=$(ls -d "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/plugins/cache/*/claude-hud/*/ 2>/dev/null | awk -F/ '{ print $(NF-1) "\t" $(0) }' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+[[:space:]]' | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n | tail -1 | cut -f2-)
 
-"/opt/homebrew/bin/node" "${plugin_dir}dist/index.js" | awk '
+node=/opt/homebrew/bin/node
+[ -x "$node" ] || node=$(ls -d "$HOME"/.nvm/versions/node/*/bin/node 2>/dev/null | sort -V | tail -1)
+
+"$node" "${plugin_dir}dist/index.js" | awk '
   function nobar(s) { gsub(/\033\[[0-9;]*m(█)*\033\[2m(░)*\033\[0m /, "", s); return s }
   function flush() { if (held != "") print held; held = ""; joined = 0 }
   /\033\[2mContext/ && !/\033\[2mUsage/ { flush(); held = $0; next }

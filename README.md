@@ -12,6 +12,16 @@ The full inventory of what's installed on this Mac.
 
 Refresh both with `./dump-packages.sh` — it rewrites `Brewfile` and prints the current manual list to reconcile against the notes in `MANUAL_APPS.md` by hand.
 
+**.NET SDK 10 comes from a local tap.** Homebrew's `dotnet-sdk` cask moved to .NET 11, and there is no `dotnet-sdk@10` cask. [`brew/Casks/dotnet-sdk@10.rb`](brew/Casks/dotnet-sdk@10.rb) is the last official 10.0 cask, renamed, made to conflict with `dotnet-sdk`, and with its livecheck removed so `brew upgrade` leaves it alone. The `brew` `dotnet` formula is avoided on purpose: it takes over `/opt/homebrew/bin/dotnet`. That also rules out the `powershell` formula, which depends on it, so pwsh is Microsoft's self-contained `.pkg` instead. Create the tap before `brew bundle install`:
+
+```sh
+brew tap-new --no-git local/dotnet
+cp brew/Casks/dotnet-sdk@10.rb "$(brew --repository)/Library/Taps/local/homebrew-dotnet/Casks/"
+brew trust local/dotnet
+```
+
+[`upd-pkg`](#functions) keeps both up to date.
+
 ## `nvim/`
 
 Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickstart.nvim) fork, mainly standalone. Under `vscode-neovim` (`vim.g.vscode`), `init.lua` stops after options, keymaps and `flash.lua`: VS Code owns completion, LSP and UI, and a plugin like blink.cmp in the embedded instance only adds ways to break (a `brew upgrade` mid-session deletes the runtime it lazy-loads from). Plugins come from Neovim's built-in `vim.pack`, not `lazy.nvim`. Snapshot covers `init.lua`, the `lua/custom/plugins/` files, and the one kickstart plugin overridden (`neo-tree.lua`).
@@ -159,6 +169,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`repos-diff [dir] [--full|-f]`** — review unmerged work across every repo under `dir` (default cwd), straight to the terminal. Per repo it diffs from the merge-base with `origin/HEAD`, so you see everything the branch added, committed or not — the same range a reviewer sees on the PR page — falling back to `HEAD` (uncommitted only) where there is no default branch. Clean repos and `_tmp` scratch dirs are skipped. Default output is a `--stat` summary; `--full` prints the whole diff.
 - **`repos-review [dir]`** — opens the Neovim panel above (`repo_diff.lua`) on `dir` (default cwd) in its own instance, so the scope is the shell's cwd rather than an editing session's. Pairs with **`repos-diff`**, which dumps the same changes to the terminal instead.
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
+- **`upd-pkg`** — update everything installed, in this order: bump the local `dotnet-sdk@10` cask to the latest 10.0 SDK (pkg downloaded into brew's cache, checked against Microsoft's sha512), install the latest pwsh `.pkg` if newer, `brew update` + `brew upgrade --greedy`, dotnet global tools (`dotnet-ef` held to `10.*`, `roslyn-language-server` with `--prerelease`, `--ignore-failed-sources` because the corporate NuGet feed is unreachable off VPN), `npm update -g`, `rustup update`, az CLI extensions. Repo-local tools in `.config/dotnet-tools.json` are left to each repo.
 - **`rcm-repos-upd`** — `z ai` then `repos-syncall`: jump to the recruitment workspace and pull every repo in it.
 - **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
 - **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.

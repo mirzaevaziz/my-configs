@@ -36,6 +36,7 @@ Reinstall from the vendor site.
 |---|---|
 | Allplay Pro | allplay.com |
 | PuntoSwitcher | yandex.ru/soft/punto |
+| PowerShell | Microsoft `.pkg` from GitHub releases (`upd-pkg` installs and updates it; the brew formula needs the `dotnet` formula, see README) |
 | Vorssaint | vendor download |
 
 ## Managed by work (MDM / Office installer)

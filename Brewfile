@@ -1,5 +1,6 @@
 tap "chrisedwards/tap", "https://github.com/ChrisEdwards/homebrew-tap", trusted: true
 tap "homebrew-ffmpeg/ffmpeg"
+tap "local/dotnet", trusted: true
 tap "pchuri/tap", trusted: true
 tap "powershell/tap", trusted: true
 # Interpreted, interactive, object-oriented programming language
@@ -46,8 +47,6 @@ brew "neovim"
 brew "node"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
-# Command-line shell and scripting language
-brew "powershell"
 # Implementation of Telnet and SSH
 brew "putty"
 # Search tool like grep and The Silver Searcher
@@ -85,7 +84,7 @@ cask "betterdisplay"
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
 # Developer platform
-cask "dotnet-sdk"
+cask "local/dotnet/dotnet-sdk@10", trusted: true
 # Developer platform
 cask "dotnet-sdk@9"
 cask "font-jetbrains-mono-nerd-font"

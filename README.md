@@ -275,6 +275,18 @@ defaults import com.vorssaint.utils vorssaint/com.vorssaint.utils.plist
 
 `defaults import` replaces the whole domain, so only run it on a fresh install. Re-sync by re-exporting the domain (`plistlib` load, drop the keys above, dump sorted) — the diff then shows only real setting changes.
 
+## `handy/settings_store.json`
+
+[Handy](https://handy.computer) speech-to-text settings (`brew install --cask handy`). Whisper Large v3 (Q8), push-to-talk, language `auto` with spoken languages `en`, `ru`, `uz`, filler-word removal on, and **Translate to English off**. With it on, Whisper outputs English for Russian speech. The toggle is hard to find in the UI, so this file is the reliable place to set it. Machine-local keys are stripped: post-processing API keys, onboarding and what's-new state, and microphone, output-device and GPU picks.
+
+Restore with Handy quit:
+
+```sh
+cp handy/settings_store.json ~/Library/Application\ Support/com.pais.handy/settings_store.json
+```
+
+Handy fills the stripped keys with defaults. Download the model from Handy's Models screen after the first launch.
+
 ## `skills/`
 
 Personal agent skills, packaged as `SKILL.md` files with frontmatter (`name`, `description`, etc.) — the format is agent-agnostic and works with any tool that loads SKILL files.

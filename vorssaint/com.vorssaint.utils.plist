@@ -35,8 +35,12 @@
 	<false/>
 	<key>featureAvailable.appUpdates</key>
 	<true/>
+	<key>featureAvailable.audioPriority</key>
+	<false/>
 	<key>featureAvailable.autoQuit</key>
 	<true/>
+	<key>featureAvailable.bluetoothSleep</key>
+	<false/>
 	<key>featureAvailable.brightness</key>
 	<true/>
 	<key>featureAvailable.cameraPreview</key>
@@ -50,6 +54,8 @@
 	<key>featureAvailable.colorPicker</key>
 	<false/>
 	<key>featureAvailable.commandBar</key>
+	<false/>
+	<key>featureAvailable.connectedDevices</key>
 	<false/>
 	<key>featureAvailable.diskImageInstaller</key>
 	<true/>
@@ -73,6 +79,10 @@
 	<true/>
 	<key>featureAvailable.keyboardDebounce</key>
 	<false/>
+	<key>featureAvailable.killProcess</key>
+	<false/>
+	<key>featureAvailable.linearScroll</key>
+	<false/>
 	<key>featureAvailable.mediaTools</key>
 	<true/>
 	<key>featureAvailable.micMute</key>
@@ -93,17 +103,53 @@
 	<true/>
 	<key>featureAvailable.monitorPower</key>
 	<true/>
+	<key>featureAvailable.mouseAcceleration</key>
+	<false/>
 	<key>featureAvailable.mouseButtonShortcuts</key>
+	<false/>
+	<key>featureAvailable.mouseClickDebounce</key>
 	<false/>
 	<key>featureAvailable.mouseNavigation</key>
 	<false/>
 	<key>featureAvailable.musicBlock</key>
 	<true/>
+	<key>featureAvailable.notch</key>
+	<true/>
+	<key>featureAvailable.notchAccessories</key>
+	<false/>
+	<key>featureAvailable.notchAgents</key>
+	<true/>
+	<key>featureAvailable.notchCalendar</key>
+	<false/>
+	<key>featureAvailable.notchDownloads</key>
+	<false/>
+	<key>featureAvailable.notchGestures</key>
+	<false/>
+	<key>featureAvailable.notchLiveEqualizer</key>
+	<false/>
+	<key>featureAvailable.notchLyrics</key>
+	<false/>
+	<key>featureAvailable.notchMascot</key>
+	<false/>
+	<key>featureAvailable.notchNotifications</key>
+	<false/>
+	<key>featureAvailable.notchQueue</key>
+	<false/>
+	<key>featureAvailable.notchTimer</key>
+	<false/>
+	<key>featureAvailable.notchWatch</key>
+	<false/>
 	<key>featureAvailable.pastePlain</key>
+	<false/>
+	<key>featureAvailable.portManager</key>
 	<false/>
 	<key>featureAvailable.quickLauncher</key>
 	<false/>
 	<key>featureAvailable.quickToggles</key>
+	<false/>
+	<key>featureAvailable.quitApps</key>
+	<false/>
+	<key>featureAvailable.quitWindowProtection</key>
 	<false/>
 	<key>featureAvailable.radialMenu</key>
 	<true/>
@@ -115,16 +161,22 @@
 	<true/>
 	<key>featureAvailable.screenshot</key>
 	<true/>
+	<key>featureAvailable.scrollHorizontal</key>
+	<false/>
 	<key>featureAvailable.scrollInverter</key>
 	<false/>
 	<key>featureAvailable.scrollSpeed</key>
 	<true/>
+	<key>featureAvailable.scrollZoom</key>
+	<false/>
 	<key>featureAvailable.shelf</key>
 	<true/>
 	<key>featureAvailable.smoothScroll</key>
 	<false/>
 	<key>featureAvailable.soundOutputSwitcher</key>
 	<true/>
+	<key>featureAvailable.spacesOrder</key>
+	<false/>
 	<key>featureAvailable.superKey</key>
 	<false/>
 	<key>featureAvailable.switcher</key>
@@ -135,6 +187,8 @@
 	<true/>
 	<key>featureAvailable.urlCleaner</key>
 	<true/>
+	<key>featureAvailable.wallpaper</key>
+	<false/>
 	<key>featureAvailable.windowLayout</key>
 	<false/>
 	<key>featureAvailable.windowMaximizer</key>
@@ -215,18 +269,30 @@
 	<true/>
 	<key>monitorSysUptime</key>
 	<true/>
+	<key>notchAccessoriesEnabled</key>
+	<false/>
 	<key>notchAgentsEnabled</key>
 	<true/>
+	<key>notchAppPanel</key>
+	<true/>
+	<key>notchCameraEnabled</key>
+	<false/>
 	<key>notchCameraFitHeight</key>
 	<real>-3.0</real>
 	<key>notchCameraFitWidth</key>
 	<real>6.0</real>
 	<key>notchCapsuleFitHeight</key>
 	<real>0.0</real>
+	<key>notchCapture</key>
+	<false/>
+	<key>notchClipboard</key>
+	<false/>
 	<key>notchCustomHeight</key>
 	<real>260.0</real>
 	<key>notchCustomWidth</key>
 	<real>520.6796875</real>
+	<key>notchDownloadsEnabled</key>
+	<false/>
 	<key>notchEnabled</key>
 	<true/>
 	<key>notchHideInFullscreen</key>
@@ -235,12 +301,24 @@
 	<true/>
 	<key>notchHidesMenuBarIcon</key>
 	<false/>
+	<key>notchKeyboardLight</key>
+	<false/>
 	<key>notchKeyboardLightControlHidden</key>
 	<true/>
 	<key>notchLiquidGlassEnabled</key>
 	<false/>
+	<key>notchLiveEqualizer</key>
+	<false/>
+	<key>notchLyricsEnabled</key>
+	<false/>
+	<key>notchNotificationsEnabled</key>
+	<false/>
+	<key>notchOpenOnHover</key>
+	<true/>
 	<key>notchOutlineEnabled</key>
 	<true/>
+	<key>notchQueueEnabled</key>
+	<false/>
 	<key>notchQuickAccessLayout</key>
 	<data>
 	eyJidXR0b25zIjpbeyJhY3Rpb25JRCI6ImV4cGxvcmUiLCJpZCI6IjAwMDAwMDAwLTAw
@@ -264,6 +342,8 @@
 	<true/>
 	<key>notchSize</key>
 	<string>custom</string>
+	<key>notchTrackChange</key>
+	<false/>
 	<key>notchTranslucentBackground</key>
 	<false/>
 	<key>panelControlFilesExpanded</key>

@@ -47,6 +47,8 @@ brew "neovim"
 brew "node"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
 # Implementation of Telnet and SSH
 brew "putty"
 # Search tool like grep and The Silver Searcher

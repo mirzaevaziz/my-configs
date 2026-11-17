@@ -21,7 +21,7 @@ function __upd_fail
     set -ga __upd_err $argv
 end
 
-function upd-pkg --description 'Update dotnet-sdk@10, pwsh, brew (--greedy), dotnet tools, npm globals, rustup, az extensions'
+function upd-pkg --description 'Update dotnet-sdk@10, pwsh, brew (--greedy), dotnet tools, npm globals, rustup, az extensions, macOS'
     set -e __upd_cur __upd_err __upd_failed  # clear leftovers from an interrupted run
     __upd_hdr 'dotnet-sdk@10'
     # 1. dotnet-sdk@10 lives in local tap local/dotnet (Homebrew moved dotnet-sdk to 11).
@@ -105,6 +105,11 @@ print(v); print(f["url"]); print(f["hash"])')
         set_color yellow; echo "→ $e"; set_color normal
         az extension update -n $e; or __upd_fail $e
     end
+
+    # 6. macOS updates last: may need a restart. No -R, so it never reboots mid-run;
+    #    softwareupdate prints when a restart is required. -a skips major OS upgrades.
+    __upd_hdr macOS
+    sudo softwareupdate -i -a; or __upd_fail 'softwareupdate'
     __upd_hdr
     echo
     if set -q __upd_failed

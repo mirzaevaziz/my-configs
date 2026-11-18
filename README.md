@@ -266,7 +266,7 @@ Global Claude Code settings, copied from `~/.claude/settings.json`.
 - **Model:** Opus at `high` effort, `latest` update channel, `dark-ansi` theme.
 - **Permissions:** `auto` default mode, with the permission prompts for auto and dangerous mode skipped. Edits under `.claude/skills/` are always allowed. Tools denied: plan mode, `AskUserQuestion`, cron, `SendMessage`, notebooks and a few others.
 - **Off:** claude.ai connectors, bundled skills, workflows, artifacts.
-- **Plugins:** `caveman`, `ponytail` and [`claude-hud`](#claude-hud), each with its GitHub marketplace listed so a fresh machine can install them.
+- **Plugins:** `caveman`, `ponytail` and [`claude-hud`](#claude-hud), each with its GitHub marketplace listed so a fresh machine can install them, plus `mattpocock-skills` from the built-in `claude-plugins-official` marketplace.
 - **Hooks and status line:** a `SessionStart` hook runs `~/.local/bin/jcode setup-hotkey`, which is a hardcoded path, so drop it if jcode is not installed. The status line points at the claude-hud wrapper below.
 
 `settings.local.json` (one-off `Bash` allows) and the `settings.json.bak*` files are not mirrored.

@@ -1,0 +1,20 @@
+# Global mise config: language runtimes and the tools their package managers install.
+# Everything else stays in the Brewfile.
+[tools]
+dotnet = "10"
+node = "lts"
+python = "3.14"
+uv = "latest"
+rust = "stable"
+powershell = "latest" # Microsoft's self-contained tarball, no .NET needed
+
+"dotnet:csharpier" = "latest"
+"dotnet:dotnet-ef" = "10" # held to the SDK major
+"dotnet:dotnet-ildasm" = "latest"
+"dotnet:dotnet-inspect" = "latest"
+"dotnet:ilspycmd" = "latest"
+"dotnet:microsoft.sqlpackage" = "latest"
+"dotnet:roslyn-language-server" = { version = "latest", prerelease = true } # ships prereleases only
+
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:confluence-cli" = "latest"

@@ -14,16 +14,22 @@ The full inventory of what's installed on this Mac.
 
 Refresh both with `./dump-packages.sh` — it rewrites `Brewfile` and prints the current manual list to reconcile against the notes in `MANUAL_APPS.md` by hand.
 
-**.NET SDK 10 comes from a local tap.** Homebrew's `dotnet-sdk` cask moved to .NET 11, and there is no `dotnet-sdk@10` cask. [`brew/Casks/dotnet-sdk@10.rb`](brew/Casks/dotnet-sdk@10.rb) is the last official 10.0 cask, renamed, made to conflict with `dotnet-sdk`, and with its livecheck removed so `brew upgrade` leaves it alone. The `brew` `dotnet` formula is avoided on purpose: it takes over `/opt/homebrew/bin/dotnet`. That also rules out the `powershell` formula, which depends on it, so pwsh is Microsoft's self-contained `.pkg` instead. Create the tap before `brew bundle install`:
+Language runtimes are not in the `Brewfile`; [mise](#miseglobaltoml) owns them. Brew keeps everything else. [`upd-pkg`](#functions) keeps all of it up to date.
 
-```sh
-brew tap-new --no-git local/dotnet
-mkdir -p "$(brew --repository)/Library/Taps/local/homebrew-dotnet/Casks"
-cp brew/Casks/dotnet-sdk@10.rb "$(brew --repository)/Library/Taps/local/homebrew-dotnet/Casks/"
-brew trust local/dotnet
-```
+## `mise/global.toml`
 
-[`upd-pkg`](#functions) keeps both up to date.
+Global [mise](https://mise.jdx.dev) config, goes to `~/.config/mise/config.toml`. Named `global.toml` here because mise reads a `mise/config.toml` in any project dir as that project's config, which would make this repo an untrusted mise project. **The rule: mise owns language runtimes and the tools their package managers install; brew keeps everything else** (fd, fzf, gh, ripgrep, lazygit, neovim, …). Unpinned everyday CLIs gain nothing from mise, and `config.fish` runs `zoxide`/`fzf` before mise activates.
+
+- **Runtimes:** .NET SDK 10, node LTS, python 3.14, uv, rust stable, and pwsh (Microsoft's self-contained tarball via aqua; brew's `powershell` formula would pull in the brew `dotnet` formula). Rust goes through rustup underneath and reuses `~/.rustup` and `~/.cargo`. Brew's `python@3.14` stays only as `azure-cli`'s dependency; azure-cli stays on brew, the install path Microsoft supports.
+- **.NET:** mise's SDKs share one root, `~/.local/share/mise/dotnet-root`, so a project needing another SDK pins it in its own `mise.toml` and the `dotnet` host picks by `global.json`, else the newest. Nothing lives in `/usr/local/share/dotnet`.
+- **dotnet tools** are `dotnet:` entries, not `dotnet tool -g`: `dotnet-ef` held to `10`, `roslyn-language-server` with `prerelease = true` (it ships prereleases only). mise has no `--ignore-failed-sources`, so `mise upgrade` fails for them off VPN while the corporate feed is in `NuGet.Config`; installed tools keep working.
+- **npm globals** are `npm:` entries (`pi-coding-agent`, `confluence-cli`), not `npm -g`.
+
+Restore on a new machine: `brew install mise`, copy the file, `mise install`, then load the [LaunchAgent](#launchdlocalmise-envplist).
+
+## `launchd/local.mise-env.plist`
+
+Goes to `~/Library/LaunchAgents/`. Apps started from the Dock, Finder or Raycast never run `config.fish`, so they would see no mise tools. At login this sets the launchd `PATH` with mise's shims first, plus `DOTNET_ROOT` to mise's .NET root (framework-dependent tools look there, not in `/usr/local/share/dotnet`). It runs through `/bin/sh` so `$HOME` expands and the plist holds no username. Load it without logging out with `launchctl load ~/Library/LaunchAgents/local.mise-env.plist`; apps already running keep their old environment until relaunched.
 
 ## `nvim/`
 
@@ -42,7 +48,7 @@ Neovim configuration — a [`kickstart.nvim`](https://github.com/nvim-lua/kickst
 - `flash.lua` — `f`/`F` jump and treesitter-node motions, `r`/`R` operators, `<C-s>` toggle in search. Char mode stays off so `t`/`T` remain stock vim.
 - `lists.lua` — `<leader>x` / `<leader>X` toggle the quickfix and location lists, which are separate and do not share commands.
 - `scrolling.lua` — `<C-d>`/`<C-u>` and `n`/`N` re-centre the cursor after moving.
-- `markdown.lua` — markdown reading. Buffers open as plain source; `<leader>mv` toggles the rendered view (render-markdown.nvim plus snacks.nvim inline images — Ghostty speaks the kitty graphics protocol, so images draw in the buffer), and `<leader>mp` opens markdown-preview.nvim in a browser for what the terminal cannot draw, i.e. mermaid and math. markdown-preview runs from its bundled node app, built once with `cd .../markdown-preview.nvim/app && yarn install`; the upstream prebuilt binary is unsigned and macOS refuses to exec it (`E903: Unknown system error -88`), so do not let `mkdp#util#install()` restore an `app/bin/` — it takes priority over the node path.
+- `markdown.lua` — markdown reading. Buffers open as plain source; `<leader>mv` toggles the rendered view (render-markdown.nvim plus snacks.nvim inline images — Ghostty speaks the kitty graphics protocol, so images draw in the buffer), and `<leader>mp` opens markdown-preview.nvim in a browser for what the terminal cannot draw, i.e. mermaid and math. markdown-preview runs from its bundled node app, built once with `cd .../markdown-preview.nvim/app && npx yarn install`; the upstream prebuilt binary is unsigned and macOS refuses to exec it (`E903: Unknown system error -88`), so do not let `mkdp#util#install()` restore an `app/bin/` — it takes priority over the node path.
 
 **Other changes from stock kickstart:** relative line numbers; telescope `find_files` and `live_grep` show hidden files but exclude `.git/`; blink.cmp uses the `super-tab` preset plus `<CR>` to accept; neo-tree gets vim-style `h`/`l` folder navigation (stock leaves `h` unmapped and binds `l` to `focus_preview`).
 
@@ -163,7 +169,7 @@ The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific a
 
 ### `config.fish`
 
-Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish autoloads each on first call).
+Locale, PATH, `zoxide`/`fzf` init, aliases, mise activation (`mise activate` in interactive shells so tools follow `cd`, `--shims` for `fish -c` and scripts). Commands live in `functions/` (fish autoloads each on first call).
 
 ### `functions/`
 
@@ -172,7 +178,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 - **`repos-diff [dir] [--full|-f]`** — review unmerged work across every repo under `dir` (default cwd), straight to the terminal. Per repo it diffs from the merge-base with `origin/HEAD`, so you see everything the branch added, committed or not — the same range a reviewer sees on the PR page — falling back to `HEAD` (uncommitted only) where there is no default branch. Clean repos and `_tmp` scratch dirs are skipped. Default output is a `--stat` summary; `--full` prints the whole diff.
 - **`repos-review [dir]`** — opens the Neovim panel above (`repo_diff.lua`) on `dir` (default cwd) in its own instance, so the scope is the shell's cwd rather than an editing session's. Pairs with **`repos-diff`**, which dumps the same changes to the terminal instead.
 - **`cs`** / **`cs-update-all`** — codebase-search helpers.
-- **`upd-pkg`** — update everything installed, in this order: bump the local `dotnet-sdk@10` cask to the latest 10.0 SDK (pkg downloaded into brew's cache, checked against Microsoft's sha512), install the latest pwsh `.pkg` if newer, `brew update` + `brew upgrade --greedy`, dotnet global tools (`dotnet-ef` held to `10.*`, `roslyn-language-server` with `--prerelease`, `--ignore-failed-sources` because the corporate NuGet feed is unreachable off VPN), `npm update -g`, `rustup update`, az CLI extensions, then `sudo softwareupdate -i -a` for macOS updates (no `-R`, so it never reboots mid-run; `-a` skips major OS upgrades). Repo-local tools in `.config/dotnet-tools.json` are left to each repo. Each step prints a cyan banner and closes with `✓ <step> done` or a red `✗ <step> failed: <what>` (a tool id, extension, or which curl/install failed); the run ends with `✓ all done` or `✗ finished with failures: …` and exit status 1. A failed release lookup counts as a failure, not "up to date".
+- **`upd-pkg`** — update everything installed, in this order: `brew update` + `brew upgrade --greedy` (mise itself included), `mise upgrade` for every global mise tool (SDK, runtimes, pwsh, `dotnet:` and `npm:` tools), az CLI extensions, then `sudo softwareupdate -i -a` for macOS updates (no `-R`, so it never reboots mid-run; `-a` skips major OS upgrades). Repo-local tools in `.config/dotnet-tools.json` are left to each repo. Each step prints a cyan banner and closes with `✓ <step> done` or a red `✗ <step> failed: <what>` (an extension, or which command failed); the run ends with `✓ all done` or `✗ finished with failures: …` and exit status 1.
 - **`rcm-repos-upd`** — `z ai` then `repos-syncall`: jump to the recruitment workspace and pull every repo in it.
 - **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
 - **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.
@@ -182,7 +188,6 @@ Locale, PATH, `zoxide`/`fzf` init, aliases. Commands live in `functions/` (fish 
 
 ### `conf.d/`
 
-- **`rustup.fish`** — rustup/cargo env (machine-generated), guarded with `test -f` so a machine without rustup starts clean.
 - **`shell.fish`** — exports `SHELL=/opt/homebrew/bin/fish`. Fish does not set `$SHELL` itself, so tools that spawn "your shell" (Raycast, Zed's `"shell": "system"` terminal) would otherwise get the login default.
 - **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will. The PAT itself is better set with `set-ado-pat`, which moves it out of this file.
 
@@ -276,7 +281,7 @@ Global Claude Code settings, copied from `~/.claude/settings.json`.
 [claude-hud](https://github.com/jarrodwatts/claude-hud) status line for Claude Code. Install the plugin (`/plugin marketplace add jarrodwatts/claude-hud`, then enable `claude-hud@claude-hud`), then:
 
 - `config.json` goes to `~/.claude/plugins/claude-hud/config.json`. Expanded layout with everything on: tools, agents, todos, token breakdown, speed, usage, effort and git ahead/behind.
-- `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is `/opt/homebrew/bin/node`, falling back to the newest `~/.nvm` node when Homebrew's is missing.
+- `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is the newest mise-installed one, read from `~/.local/share/mise/installs` rather than the shim, which would resolve the cwd project's mise config and need it trusted; falls back to `node` on `PATH`.
 
 ## `vorssaint/com.vorssaint.utils.plist`
 

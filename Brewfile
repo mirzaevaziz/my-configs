@@ -1,7 +1,5 @@
 tap "chrisedwards/tap", "https://github.com/ChrisEdwards/homebrew-tap", trusted: true
 tap "homebrew-ffmpeg/ffmpeg"
-tap "local/dotnet", trusted: true
-tap "pchuri/tap", trusted: true
 tap "powershell/tap", trusted: true
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.14"
@@ -39,12 +37,12 @@ brew "lazydocker"
 brew "lazygit"
 # Utility for directing compilation
 brew "make"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
 # Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -63,8 +61,6 @@ brew "sshpass"
 brew "tree-sitter-cli"
 # Extraction utility for .zip compressed archives
 brew "unzip"
-# Extremely fast Python package installer and resolver, written in Rust
-brew "uv"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
@@ -79,14 +75,10 @@ brew "zoxide"
 brew "chrisedwards/tap/abacus", trusted: true
 # Play, record, convert, and stream audio and video
 brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-zimg"], trusted: true
-# Command-line interface for Atlassian Confluence
-brew "pchuri/tap/confluence-cli", trusted: true
 # Display management tool
 cask "betterdisplay"
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
-# Developer platform
-cask "local/dotnet/dotnet-sdk@10", trusted: true
 # Developer platform
 cask "dotnet-sdk@9"
 cask "font-jetbrains-mono-nerd-font"
@@ -110,5 +102,3 @@ cask "obs"
 cask "rustdesk"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
-npm "@earendil-works/pi-coding-agent"
-npm "yarn"

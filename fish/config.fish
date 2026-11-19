@@ -24,6 +24,13 @@ end
 
 eval (/opt/homebrew/bin/brew shellenv fish)
 
+# mise: interactive shells switch tools on cd; non-interactive (fish -c, scripts) use shims
+if status is-interactive
+    mise activate fish | source
+else
+    mise activate fish --shims | source
+end
+
 
 # editor
 set -gx EDITOR nvim

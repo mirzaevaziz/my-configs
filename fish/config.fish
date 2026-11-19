@@ -18,10 +18,6 @@ fzf --fish | source
 
 # repo helpers (repos-info, repos-syncall) autoload from functions/
 
-if not contains "$HOME/.local/bin" $PATH
-    set -gx PATH "$HOME/.local/bin" $PATH
-end
-
 eval (/opt/homebrew/bin/brew shellenv fish)
 
 # mise: interactive shells switch tools on cd; non-interactive (fish -c, scripts) use shims

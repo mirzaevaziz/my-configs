@@ -308,3 +308,19 @@ Personal agent skills, packaged as `SKILL.md` files with frontmatter (`name`, `d
 
 - **[`engineering/cleanup-branches`](skills/engineering/cleanup-branches/SKILL.md)** — Delete unwanted local branches from every git repo under the current working directory. Protects `main` / `master` / `develop` and the currently checked-out branch; confirms the full list before deleting.
 - **[`engineering/create-branch`](skills/engineering/create-branch/SKILL.md)** — Create the same logically-named branch across one or more selected repos under the current working directory. Each repo resolves its own naming template via `git config branch.naming.template` (with a sensible default); branches are created locally from a freshly-fetched `origin/main`.
+
+## Third-party skills (not versioned)
+
+Installed on each Mac, not copied into this repo.
+
+- **mattpocock skills** come from the `mattpocock-skills@claude-plugins-official` plugin (`/plugin install mattpocock-skills@claude-plugins-official`), not the `npx skills` CLI. The plugin only reaches Claude Code. Copilot and the other agents read `~/.agents/skills`, so link the plugin's skills there through one pointer at the versioned plugin cache:
+
+  ```sh
+  P=$(ls -d ~/.claude/plugins/cache/claude-plugins-official/mattpocock-skills/*/ | sort -V | tail -1)
+  mkdir -p ~/.agents/plugins && ln -sfn "${P%/}" ~/.agents/plugins/mattpocock-skills
+  cd ~/.agents/skills && jq -r '.skills[] | ltrimstr("./")' ~/.agents/plugins/mattpocock-skills/.claude-plugin/plugin.json |
+    while read -r s; do [ -e "$(basename "$s")" ] || ln -s "../plugins/mattpocock-skills/$s" "$(basename "$s")"; done
+  ```
+
+  The cache path changes on each plugin update, so re-run the block afterwards: it re-points the one link and adds any new skills. Do not link them into `~/.claude/skills`, since Claude already loads them from the plugin.
+- **`socratic-tutor`**: `npx skills add janestreet/agent_skills --skill socratic-tutor -g -y`. It installs to `~/.agents/skills` and symlinks into `~/.claude/skills`.

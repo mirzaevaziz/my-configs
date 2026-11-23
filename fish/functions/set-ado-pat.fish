@@ -1,13 +1,15 @@
-function set-ado-pat --description "Set one Azure DevOps PAT for both ADNOC_FEED_TOKEN and AZURE_DEVOPS_EXT_PAT"
-    set -l secrets ~/.config/fish/conf.d/secrets.fish
+function set-ado-pat --description "Set the Azure DevOps PAT (ADNOC_FEED_TOKEN, AZURE_DEVOPS_EXT_PAT) in global mise config"
+    # Machine-local, mode 600, not mirrored to my-configs. AZURE_DEVOPS_EXT_PAT maps to it there.
+    set -l file ~/.config/mise/config.local.toml
     set -l pat $argv[1]
 
     if test -z "$pat"
         read --silent --prompt-str="Azure DevOps PAT: " pat
         echo
     end
-    if test -z "$pat"
-        echo "set-ado-pat: no PAT given." >&2
+    # Azure DevOps PATs are alphanumeric; anything else would break the TOML line or the sed below.
+    if not string match -qr '^[A-Za-z0-9]+$' -- "$pat"
+        echo "set-ado-pat: no PAT given, or it has characters other than letters and digits. Nothing changed." >&2
         return 1
     end
 
@@ -19,27 +21,16 @@ function set-ado-pat --description "Set one Azure DevOps PAT for both ADNOC_FEED
         return 1
     end
 
-    # Universal vars are the single fish source of truth. A global of the same
-    # name (e.g. from secrets.fish) would shadow them, so strip and erase those.
-    if test -f $secrets
-        sed -i '' -E '/^set -gx (ADNOC_FEED_TOKEN|AZURE_DEVOPS_EXT_PAT) /d' $secrets
+    if not test -f $file
+        printf '%s\n' '[env]' 'AZURE_DEVOPS_EXT_PAT = { value = "{{ env.ADNOC_FEED_TOKEN }}", tools = true } # one PAT for both' >$file
     end
-    set -eg ADNOC_FEED_TOKEN 2>/dev/null
-    set -eg AZURE_DEVOPS_EXT_PAT 2>/dev/null
-    set -Ux ADNOC_FEED_TOKEN $pat
-    set -Ux AZURE_DEVOPS_EXT_PAT $pat
-
-    # Keep bash and zsh in step, so tools launched from those shells see the same PAT.
-    for rc in ~/.bashrc ~/.zshenv
-        test -f $rc; or touch $rc
-        if grep -q '^export ADNOC_FEED_TOKEN=' $rc
-            sed -i '' -E "s|^export ADNOC_FEED_TOKEN=.*|export ADNOC_FEED_TOKEN=\"$pat\"|" $rc
-        else
-            echo "export ADNOC_FEED_TOKEN=\"$pat\"" >> $rc
-        end
-        grep -q '^export AZURE_DEVOPS_EXT_PAT=' $rc
-        or echo 'export AZURE_DEVOPS_EXT_PAT="$ADNOC_FEED_TOKEN"' >> $rc
+    chmod 600 $file
+    if grep -q '^ADNOC_FEED_TOKEN = ' $file
+        sed -i '' -E "s|^ADNOC_FEED_TOKEN = .*|ADNOC_FEED_TOKEN = \"$pat\"|" $file
+    else
+        # ponytail: appends to the last table; the file holds only [env]
+        echo "ADNOC_FEED_TOKEN = \"$pat\"" >>$file
     end
 
-    echo "PAT OK (HTTP 200). Set as fish universal vars (-Ux) and written to ~/.bashrc, ~/.zshenv."
+    echo "PAT OK (HTTP 200). Written to $file; mise loads it at the next prompt (new shells and agents get it too)."
 end

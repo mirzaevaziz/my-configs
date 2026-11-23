@@ -25,6 +25,8 @@ Global [mise](https://mise.jdx.dev) config, goes to `~/.config/mise/config.toml`
 - **dotnet tools** are `dotnet:` entries, not `dotnet tool -g`: `dotnet-ef` held to `10`, `roslyn-language-server` with `prerelease = true` (it ships prereleases only). mise has no `--ignore-failed-sources`, so `mise upgrade` fails for them off VPN while the corporate feed is in `NuGet.Config`; installed tools keep working.
 - **npm globals** are `npm:` entries (`pi-coding-agent`, `confluence-cli`), not `npm -g`.
 
+- **Secrets** live next to it in `~/.config/mise/config.local.toml` (`[env]`, `chmod 600`, not mirrored): the ADO PAT (written by [`set-ado-pat`](#functions)), the Confluence PAT, and dev client secrets. mise merges it over `config.toml`, so they reach every shell, `fish -c` and agent. Create it by hand on a new machine.
+
 Restore on a new machine: `brew install mise`, copy the file, `mise install`, then load the [LaunchAgent](#launchdlocalmise-envplist).
 
 ## `launchd/local.mise-env.plist`
@@ -165,7 +167,7 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
-The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. Secrets live in the gitignored [`conf.d/secrets.fish`](#confd), never in `config.fish`.
+The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. `mr` is `mise run`. Secrets live in the machine-local [`~/.config/mise/config.local.toml`](#miseglobaltoml), never in `config.fish`.
 
 ### `config.fish`
 
@@ -182,14 +184,14 @@ Locale, PATH, `zoxide`/`fzf` init, aliases, mise activation (`mise activate` in 
 - **`rcm-repos-upd`** — `z ai` then `repos-syncall`: jump to the recruitment workspace and pull every repo in it.
 - **`fish_title`** — the Ghostty tab label: a colored dot plus the shortened cwd. The dot is the point — `~/Projects/adnoc` is blue, `epam` green, `self` purple, `skills` yellow, `~/learn-terminal` orange, anything else white, and a shell with `SSH_TTY` set is red. Fish re-runs `fish_title` every prompt, so the dot follows `cd` with nothing to trigger by hand. See [why it is a dot and not a colored tab](#ghosttyconfig).
 - **`ssh`** — wraps `ssh` to set the tab title to a red dot plus the host argument before handing off, so a tab sitting on a remote host is obvious at a glance. Titles set by the remote shell take over from there; the next local prompt restores `fish_title`.
-- **`set-ado-pat [pat]`** — sets one Azure DevOps PAT as both `ADNOC_FEED_TOKEN` and `AZURE_DEVOPS_EXT_PAT`. Checks it against the ADO API first, so a bad paste never replaces a working token, then stores it as fish universal vars (`-Ux`), strips any copy from `secrets.fish` that would shadow them, and exports it in `~/.bashrc` / `~/.zshenv` for the other shells. Prompts silently if no argument is given.
+- **`set-ado-pat [pat]`** — sets the Azure DevOps PAT as `ADNOC_FEED_TOKEN` in `~/.config/mise/config.local.toml` (created with `[env]` and `AZURE_DEVOPS_EXT_PAT` mapped to it if missing, `chmod 600`). Rejects anything but letters and digits, and checks the PAT against the ADO API first, so a bad paste never replaces a working token. mise loads it at the next prompt, so every shell and agent sees it. Prompts silently if no argument is given.
 - **`repos-tomain`** — switch every repo under cwd to its default branch (stashes dirty ones on confirm). Run inside a repo and it acts on that repo instead of its children.
 - **`repos-revert [dir] [--dry-run]`** — VS Code "Discard All Changes" across every repo under `dir` (default cwd). Commits and branches are never touched. Per repo it prompts separately for staged (`git restore --staged --worktree`), working tree (`git restore --worktree` + `git clean -fdx`), and — only once something was actually reverted there — stashes (`git stash clear`). Keys are `[y/N/a/i/q]`: `a` = yes to the rest of *this* repo, `i` = list the affected files then re-ask, `q` = quit the run. **`clean -fdx` also deletes gitignored files** (`bin/`, `obj/`, `.env`, …) with no git-side recovery — `--dry-run` previews exactly what each repo would lose. Paths in `$repos_revert_keep` (default `.codesearch.db`) are excluded; override with `set -g repos_revert_keep a b c`.
 
 ### `conf.d/`
 
 - **`shell.fish`** — exports `SHELL=/opt/homebrew/bin/fish`. Fish does not set `$SHELL` itself, so tools that spawn "your shell" (Raycast, Zed's `"shell": "system"` terminal) would otherwise get the login default.
-- **`secrets.fish`** — gitignored, not in this repo. Holds `ADNOC_FEED_TOKEN` (an Azure DevOps PAT) and `AZURE_DEVOPS_EXT_PAT`. Lives in `conf.d/` so fish autoloads it before `config.fish`; `chmod 600`. On a new machine, create it by hand — nothing here will. The PAT itself is better set with `set-ado-pat`, which moves it out of this file.
+- **`secrets.fish`** — gitignored, not in this repo, and now empty: secrets moved to mise's [`config.local.toml`](#miseglobaltoml). Kept only as a placeholder for fish-only secrets.
 
 ## `karabiner/karabiner.json`
 
@@ -272,7 +274,7 @@ Global Claude Code settings, copied from `~/.claude/settings.json`.
 - **Permissions:** `auto` default mode, with the permission prompts for auto and dangerous mode skipped. Edits under `.claude/skills/` are always allowed. Tools denied: plan mode, `AskUserQuestion`, cron, `SendMessage`, notebooks and a few others.
 - **Off:** claude.ai connectors, bundled skills, workflows, artifacts.
 - **Plugins:** `caveman`, `ponytail` and [`claude-hud`](#claude-hud), each with its GitHub marketplace listed so a fresh machine can install them, plus `mattpocock-skills` from the built-in `claude-plugins-official` marketplace.
-- **Hooks and status line:** a `SessionStart` hook runs `~/.local/bin/jcode setup-hotkey`, which is a hardcoded path, so drop it if jcode is not installed. The status line points at the claude-hud wrapper below.
+- **Status line:** points at the claude-hud wrapper below.
 
 `settings.local.json` (one-off `Bash` allows) and the `settings.json.bak*` files are not mirrored.
 

@@ -74,7 +74,7 @@ brew "zoxide"
 # TUI viewer for Beads issue tracking
 brew "chrisedwards/tap/abacus", trusted: true
 # Play, record, convert, and stream audio and video
-brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-zimg"], trusted: true
+brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-zimg"], link: false, trusted: true
 # Display management tool
 cask "betterdisplay"
 # Brings the power of Copilot coding agent directly to your terminal

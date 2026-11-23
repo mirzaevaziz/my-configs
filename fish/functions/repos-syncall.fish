@@ -1,5 +1,13 @@
-function repos-syncall --description 'fetch + safe pull every repo under a dir (default: cwd); prompts to stash dirty ones' --argument-names root
-    set -q root[1]; or set root $PWD
+function repos-syncall --description 'fetch + safe pull every repo under a dir (default: parent of the outermost repo you are in, else cwd); prompts to stash dirty ones' --argument-names root
+    # no arg: walk up to the outermost repo (repos nest), root = its parent; no repo above = cwd
+    if not set -q root[1]
+        set root $PWD
+        set -l d $PWD
+        while test "$d" != /
+            test -e $d/.git; and set root (path dirname $d)
+            set d (path dirname $d)
+        end
+    end
     set -l yesall 0
     set -l conflicts
     # prefetch all repos in parallel — network is the bottleneck, local logic below is fast.
@@ -9,7 +17,7 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
     # syncall looks frozen for the whole fetch window and you'd Ctrl-C a working run.
     set -lx GIT_SSH_COMMAND "ssh -o BatchMode=yes -o ConnectTimeout=10"
     set -l pids
-    for d in (find $root -type d -name .git -maxdepth 4)
+    for d in (find $root \( -name node_modules -o -name bin -o -name obj \) -prune -o -type d -name .git -prune -print)
         set -l repo (dirname $d)
         string match -q _tmp (basename $repo); and test "$repo" != "$root"; and continue
         git -C $repo fetch --quiet 2>/dev/null &
@@ -33,7 +41,7 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
         wait $p 2>/dev/null
     end
     printf "\033[2K" # clear the spinner line before per-repo results
-    for d in (find $root -type d -name .git -maxdepth 4 | sort)
+    for d in (find $root \( -name node_modules -o -name bin -o -name obj \) -prune -o -type d -name .git -prune -print | sort)
         set -l repo (dirname $d)
         set -l name (basename $repo)
         string match -q _tmp $name; and test "$repo" != "$root"; and continue

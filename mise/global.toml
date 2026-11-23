@@ -20,6 +20,7 @@ powershell = "latest" # Microsoft's self-contained tarball, no .NET needed
 "npm:confluence-cli" = "latest"
 
 [tasks.repos-sync]
-description = "repos-syncall at REPOS_ROOT (a workspace's mise.local.toml sets it), else cwd"
+description = "repos-syncall from cwd: syncs everything under the parent of the outermost repo you are in"
 raw = true # repos-syncall prompts (stash? y/N/a/q), needs real stdin
-run = "fish -c 'repos-syncall $REPOS_ROOT'" # fish drops an unset var, so the cwd default kicks in
+dir = "{{cwd}}" # global tasks default to ~, repos-syncall needs where you ran it
+run = "fish -c repos-syncall"

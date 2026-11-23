@@ -23,20 +23,6 @@
   "model": "opus",
   "disableClaudeAiConnectors": true,
   "disableBundledSkills": true,
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$HOME/.local/bin/jcode\" setup-hotkey --notify-cli-launch claude",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  },
   "disableWorkflows": true,
   "disableArtifact": true,
   "statusLine": {

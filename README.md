@@ -24,7 +24,6 @@ Global [mise](https://mise.jdx.dev) config, goes to `~/.config/mise/config.toml`
 - **.NET:** mise's SDKs share one root, `~/.local/share/mise/dotnet-root`, so a project needing another SDK pins it in its own `mise.toml` and the `dotnet` host picks by `global.json`, else the newest. Nothing lives in `/usr/local/share/dotnet`. Installing any SDK rewrites the shared `dotnet` host in place, after which macOS kills it on launch (exit 137); `cp -p dotnet dotnet.new && mv -f dotnet.new dotnet` in that root fixes it, and `upd-pkg` does this after `mise upgrade`.
 - **dotnet tools** are `dotnet:` entries, not `dotnet tool -g`: `dotnet-ef` held to `10`, `roslyn-language-server` with `prerelease = true` (it ships prereleases only). mise has no `--ignore-failed-sources`, so `mise upgrade` fails for them off VPN while the corporate feed is in `NuGet.Config`; installed tools keep working.
 - **npm globals** are `npm:` entries (`pi-coding-agent`, `confluence-cli`), not `npm -g`.
-- **`repos-sync` task** (`mr repos-sync`, `mr` = `mise run`): runs [`repos-syncall`](#functions) from the cwd (`dir = "{{cwd}}"`, since global tasks otherwise run from `~`), so it works from any subfolder with no per-workspace setup.
 
 - **Secrets** live next to it in `~/.config/mise/config.local.toml` (`[env]`, `chmod 600`, not mirrored): the ADO PAT (written by [`set-ado-pat`](#functions)), the Confluence PAT, and dev client secrets. mise merges it over `config.toml`, so they reach every shell, `fish -c` and agent. Create it by hand on a new machine.
 

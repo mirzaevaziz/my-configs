@@ -18,9 +18,3 @@ powershell = "latest" # Microsoft's self-contained tarball, no .NET needed
 
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:confluence-cli" = "latest"
-
-[tasks.repos-sync]
-description = "repos-syncall from cwd: syncs everything under the parent of the outermost repo you are in"
-raw = true # repos-syncall prompts (stash? y/N/a/q), needs real stdin
-dir = "{{cwd}}" # global tasks default to ~, repos-syncall needs where you ran it
-run = "fish -c repos-syncall"

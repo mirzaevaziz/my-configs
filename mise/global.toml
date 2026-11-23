@@ -18,3 +18,8 @@ powershell = "latest" # Microsoft's self-contained tarball, no .NET needed
 
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:confluence-cli" = "latest"
+
+[tasks.repos-sync]
+description = "repos-syncall at REPOS_ROOT (a workspace's mise.local.toml sets it), else cwd"
+raw = true # repos-syncall prompts (stash? y/N/a/q), needs real stdin
+run = "fish -c 'repos-syncall $REPOS_ROOT'" # fish drops an unset var, so the cwd default kicks in

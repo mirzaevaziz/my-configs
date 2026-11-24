@@ -26,7 +26,7 @@
 	<key>cleaningModeKeepScreenVisible</key>
 	<true/>
 	<key>defaultDurationMinutes</key>
-	<integer>480</integer>
+	<integer>240</integer>
 	<key>diskImageInstallerRevealsApp</key>
 	<false/>
 	<key>diskImageInstallerTrashesDownload</key>

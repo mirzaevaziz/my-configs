@@ -19,7 +19,13 @@ fzf --fish | source
 
 # repo helpers (repos-info, repos-syncall) autoload from functions/
 
-eval (/opt/homebrew/bin/brew shellenv fish)
+# static copy of `brew shellenv fish` (saves a process per shell); re-check after brew changes
+set -gx HOMEBREW_PREFIX /opt/homebrew
+set -gx HOMEBREW_CELLAR /opt/homebrew/Cellar
+set -gx HOMEBREW_REPOSITORY /opt/homebrew
+fish_add_path --global --move --path /opt/homebrew/bin /opt/homebrew/sbin
+if test -n "$MANPATH"; set -gx MANPATH (string replace --regex '^:*(.*?):*$' ':$1' -- "$MANPATH"); end
+if not set -q INFOPATH; set INFOPATH ''; end; set -gx INFOPATH /opt/homebrew/share/info $INFOPATH
 
 # mise: interactive shells switch tools on cd; non-interactive (fish -c, scripts) use shims
 if status is-interactive

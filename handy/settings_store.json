@@ -165,15 +165,14 @@
     "selected_channel": null,
     "selected_language": "auto",
     "selected_model": "handy-computer/whisper-large-v3-gguf/whisper-large-v3-Q8_0.gguf",
-    "settings_schema_version": 2,
+    "settings_schema_version": 3,
     "shortcut_activation": "push_to_talk",
     "show_tray_icon": true,
     "show_whats_new_on_update": true,
     "sound_theme": "marimba",
     "spoken_languages": [
       "en",
-      "ru",
-      "uz"
+      "ru"
     ],
     "start_hidden": true,
     "theme": "system",

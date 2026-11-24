@@ -171,7 +171,7 @@ The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific a
 
 ### `config.fish`
 
-Locale, PATH, `zoxide`/`fzf` init, aliases, mise activation (`mise activate` in interactive shells so tools follow `cd`, `--shims` for `fish -c` and scripts). Commands live in `functions/` (fish autoloads each on first call).
+Locale, PATH, `zoxide`/`fzf` init, aliases, a static copy of `brew shellenv fish` (saves a process per shell; re-check it after Homebrew changes what that command prints), mise activation (`mise activate` in interactive shells so tools follow `cd`, `--shims` for `fish -c` and scripts). Commands live in `functions/` (fish autoloads each on first call).
 
 ### `functions/`
 
@@ -189,7 +189,7 @@ Locale, PATH, `zoxide`/`fzf` init, aliases, mise activation (`mise activate` in 
 
 ### `conf.d/`
 
-- **`shell.fish`** — exports `SHELL=/opt/homebrew/bin/fish`. Fish does not set `$SHELL` itself, so tools that spawn "your shell" (Raycast, Zed's `"shell": "system"` terminal) would otherwise get the login default.
+- **`shell.fish`** — sets `MISE_FISH_AUTO_ACTIVATE=0` so Homebrew's `vendor_conf.d/mise-activate.fish` does not activate mise a second time on top of `config.fish`. Also exports `SHELL=/opt/homebrew/bin/fish`. Fish does not set `$SHELL` itself, so tools that spawn "your shell" (Raycast, Zed's `"shell": "system"` terminal) would otherwise get the login default.
 - **`secrets.fish`** — gitignored, not in this repo, and now empty: secrets moved to mise's [`config.local.toml`](#miseglobaltoml). Kept only as a placeholder for fish-only secrets.
 
 ## `karabiner/karabiner.json`
@@ -298,7 +298,7 @@ defaults import com.vorssaint.utils vorssaint/com.vorssaint.utils.plist
 
 ## `handy/settings_store.json`
 
-[Handy](https://handy.computer) speech-to-text settings (`brew install --cask handy`). Whisper Large v3 (Q8), push-to-talk, language `auto` with spoken languages `en`, `ru`, `uz`, filler-word removal on, and **Translate to English off**. With it on, Whisper outputs English for Russian speech. The toggle is hard to find in the UI, so this file is the reliable place to set it. Machine-local keys are stripped: post-processing API keys, onboarding and what's-new state, and microphone, output-device and GPU picks.
+[Handy](https://handy.computer) speech-to-text settings (`brew install --cask handy`). Whisper Large v3 (Q8), push-to-talk, language `auto` with spoken languages `en`, `ru`, filler-word removal on, and **Translate to English off**. With it on, Whisper outputs English for Russian speech. The toggle is hard to find in the UI, so this file is the reliable place to set it. Machine-local keys are stripped: post-processing API keys, onboarding and what's-new state, and microphone, output-device and GPU picks.
 
 Restore with Handy quit:
 

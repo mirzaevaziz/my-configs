@@ -2,6 +2,12 @@
   "lineLayout": "expanded",
   "showSeparators": false,
   "language": "en",
+  "gitStatus": {
+    "enabled": true,
+    "showDirty": true,
+    "showAheadBehind": true,
+    "showFileStats": false
+  },
   "display": {
     "showTools": true,
     "showAgents": true,
@@ -15,12 +21,7 @@
     "showUsage": true,
     "showSessionTokens": true,
     "showEffortLevel": true,
-    "contextValue": "both"
-  },
-  "gitStatus": {
-    "enabled": true,
-    "showDirty": true,
-    "showAheadBehind": true,
-    "showFileStats": false
+    "contextValue": "both",
+    "sevenDayThreshold": 0
   }
 }

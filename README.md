@@ -281,7 +281,7 @@ Global Claude Code settings, copied from `~/.claude/settings.json`.
 
 [claude-hud](https://github.com/jarrodwatts/claude-hud) status line for Claude Code. Install the plugin (`/plugin marketplace add jarrodwatts/claude-hud`, then enable `claude-hud@claude-hud`), then:
 
-- `config.json` goes to `~/.claude/plugins/claude-hud/config.json`. Expanded layout with everything on: tools, agents, todos, token breakdown, speed, usage, effort and git ahead/behind.
+- `config.json` goes to `~/.claude/plugins/claude-hud/config.json`. Expanded layout with everything on: tools, agents, todos, token breakdown, speed, usage, effort and git ahead/behind. `sevenDayThreshold: 0` shows the Weekly bar always; the default 80 hides it until 80% of the weekly limit is used.
 - `hud-statusline.sh` goes to `~/.claude/hud-statusline.sh`, with `"statusLine": {"type": "command", "command": "bash \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud-statusline.sh\""}` in `~/.claude/settings.json`. It wraps the plugin's latest cached `dist/index.js`: Claude Code gives the status line no `/dev/tty`, so it reads the width from the parent process's terminal. The Context, Usage and Weekly rows are joined into one row with their bars removed, and `(resets in X)` is shortened to `X`. Pass a column count (`hud-statusline.sh 100`) to test a width. Node is the newest mise-installed one, read from `~/.local/share/mise/installs` rather than the shim, which would resolve the cwd project's mise config and need it trusted; falls back to `node` on `PATH`.
 
 ## `vorssaint/com.vorssaint.utils.plist`

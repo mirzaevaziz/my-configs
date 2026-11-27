@@ -21,7 +21,7 @@ function __upd_fail
     set -ga __upd_err $argv
 end
 
-function upd-pkg --description 'Update brew (--greedy), mise tools, az extensions, macOS'
+function upd-pkg --description 'Update brew (--greedy), mise tools, az extensions, App Store apps, macOS'
     set -e __upd_cur __upd_err __upd_failed  # clear leftovers from an interrupted run
     __upd_hdr 'brew (--greedy)'
     # 1. brew formulae + casks (also upgrades mise itself)
@@ -44,7 +44,11 @@ function upd-pkg --description 'Update brew (--greedy), mise tools, az extension
         az extension update -n $e; or __upd_fail $e
     end
 
-    # 4. macOS updates last: may need a restart. No -R, so it never reboots mid-run;
+    # 4. App Store apps. mas 7+ needs root to update; needs the App Store app signed in.
+    __upd_hdr 'App Store'
+    sudo mas upgrade; or __upd_fail 'mas upgrade'
+
+    # 5. macOS updates last: may need a restart. No -R, so it never reboots mid-run;
     #    softwareupdate prints when a restart is required. -a skips major OS upgrades.
     __upd_hdr macOS
     sudo softwareupdate -i -a; or __upd_fail 'softwareupdate'

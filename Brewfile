@@ -37,6 +37,8 @@ brew "lazydocker"
 brew "lazygit"
 # Utility for directing compilation
 brew "make"
+# Mac App Store command-line interface
+brew "mas"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Incremental parsing library
@@ -102,3 +104,17 @@ cask "obs"
 cask "rustdesk"
 # Mesh VPN based on WireGuard
 cask "tailscale-app"
+mas "Allplay Pro", id: 1136344649
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft Outlook", id: 985367838
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft Word", id: 462054704
+mas "Numbers", id: 409203825
+mas "OneDrive", id: 823766827
+mas "Pages", id: 409201541
+mas "Push Security", id: 1596916655
+mas "Windows App", id: 1295203466
+mas "Xcode", id: 497799835

@@ -16,5 +16,4 @@ powershell = "latest" # Microsoft's self-contained tarball, no .NET needed
 "dotnet:microsoft.sqlpackage" = "latest"
 "dotnet:roslyn-language-server" = { version = "latest", prerelease = true } # ships prereleases only
 
-"npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:confluence-cli" = "latest"

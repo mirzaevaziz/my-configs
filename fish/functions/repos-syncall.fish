@@ -55,7 +55,8 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
         end
         set -l behind (echo $ab | awk '{print $1}')
         set -l ahead (echo $ab | awk '{print $2}')
-        set -l dirty (git -C $repo status --porcelain | count)
+        # tracked changes only: ff merge refuses on its own if an untracked file would be overwritten
+        set -l dirty (git -C $repo status --porcelain -uno | count)
 
         if test "$ahead" -gt 0
             printf "%s %s\n" $disp (__repos_status warn "SKIP (diverged — $ahead ahead)"); continue
@@ -84,7 +85,8 @@ function repos-syncall --description 'fetch + safe pull every repo under a dir (
         end
 
         # stash -> pull -> pop, guarding the stash the whole way
-        if not git -C $repo stash -u >/dev/null 2>&1
+        # no -u: stash -u runs an internal clean; suspected (not reproduced) of wiping every tracked file of a nested repo under repos/ on 2026-11-27
+        if not git -C $repo stash >/dev/null 2>&1
             printf "%s %s\n" $disp (__repos_status err "SKIP (stash failed)"); continue
         end
         if not git -C $repo merge --ff-only '@{u}' >/dev/null 2>&1

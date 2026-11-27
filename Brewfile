@@ -81,8 +81,6 @@ brew "homebrew-ffmpeg/ffmpeg/ffmpeg", args: ["with-zimg"], trusted: true
 cask "betterdisplay"
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
-# Developer platform
-cask "dotnet-sdk@9"
 cask "font-jetbrains-mono-nerd-font"
 # Speech to text application
 cask "handy"

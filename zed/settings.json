@@ -78,7 +78,7 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Catppuccin Mocha",
+    "dark": "Ayu Dark",
   },
   // Tokyo Night defines no terminal foreground, so Zed fell back to near-white
   "theme_overrides": {

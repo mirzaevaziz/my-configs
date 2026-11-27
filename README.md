@@ -167,7 +167,7 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
-The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` / `co` are the yolo launchers for `claude` / `copilot`; the bare commands stay stock. `mr` is `mise run`. Secrets live in the machine-local [`~/.config/mise/config.local.toml`](#miseglobaltoml), never in `config.fish`.
+The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` launches `claude --permission-mode auto` (classifier-gated, not skip-all), `co` is the yolo launcher for `copilot`; the bare commands stay stock. `mr` is `mise run`. Secrets live in the machine-local [`~/.config/mise/config.local.toml`](#miseglobaltoml), never in `config.fish`.
 
 ### `config.fish`
 

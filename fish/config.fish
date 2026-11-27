@@ -9,7 +9,7 @@ end
 set -gx LANG en_US.UTF-8
 set -gx LC_ALL en_US.UTF-8
 set -gx DOTNET_CLI_UI_LANGUAGE en
-alias ca='claude --dangerously-skip-permissions'
+alias ca='claude --permission-mode auto'
 alias co='copilot --no-ask-user --sync-session off --disable-builtin-mcps --yolo'
 alias mr='mise run'
 

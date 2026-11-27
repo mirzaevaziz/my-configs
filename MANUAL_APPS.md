@@ -42,7 +42,7 @@ Reinstall from the vendor site.
 
 Do not reinstall by hand — they arrive with the corporate profile.
 
-Company Portal, GlobalProtect, ProctorFree, Microsoft Excel / Outlook /
+Company Portal, GlobalProtect, ProctorFree, Push Security, Microsoft Excel / Outlook /
 PowerPoint / Teams / Word, OneDrive.
 
 ## Ships with macOS / Xcode

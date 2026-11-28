@@ -30,8 +30,11 @@ function upd-pkg --description 'Update brew (--greedy), mise tools, az extension
 
     __upd_hdr mise
     # 2. global mise tools: dotnet SDK, node, python, uv, rust, pwsh, dotnet: and npm: tools.
-    #    dotnet: tools fail off VPN while the corporate feed is in NuGet.Config.
+    #    Run from ~: dotnet tool install reads NuGet.config up the cwd tree, and the work repos'
+    #    one does <clear/> + maps * to the ADNOC feed, so nuget.org tools fail from inside them.
+    pushd ~
     mise upgrade; or __upd_fail 'mise upgrade'
+    popd
     # A .NET SDK install rewrites the shared dotnet host in place, and macOS then kills it on launch
     # (exit 137, stale code-signature cache). Replacing it with a fresh copy fixes that.
     set -l host ~/.local/share/mise/dotnet-root/dotnet

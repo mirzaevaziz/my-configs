@@ -22,7 +22,7 @@ Global [mise](https://mise.jdx.dev) config, goes to `~/.config/mise/config.toml`
 
 - **Runtimes:** .NET SDK 10, node LTS, python 3.14, uv, rust stable, and pwsh (Microsoft's self-contained tarball via aqua; brew's `powershell` formula would pull in the brew `dotnet` formula). Rust goes through rustup underneath and reuses `~/.rustup` and `~/.cargo`. Brew's `python@3.14` stays only as `azure-cli`'s dependency; azure-cli stays on brew, the install path Microsoft supports.
 - **.NET:** mise's SDKs share one root, `~/.local/share/mise/dotnet-root`, so a project needing another SDK pins it in its own `mise.toml` and the `dotnet` host picks by `global.json`, else the newest. Nothing lives in `/usr/local/share/dotnet`. Installing any SDK rewrites the shared `dotnet` host in place, after which macOS kills it on launch (exit 137); `cp -p dotnet dotnet.new && mv -f dotnet.new dotnet` in that root fixes it, and `upd-pkg` does this after `mise upgrade`.
-- **dotnet tools** are `dotnet:` entries, not `dotnet tool -g`: `dotnet-ef` held to `10`, `roslyn-language-server` with `prerelease = true` (it ships prereleases only). mise has no `--ignore-failed-sources`, so `mise upgrade` fails for them off VPN while the corporate feed is in `NuGet.Config`; installed tools keep working.
+- **dotnet tools** are `dotnet:` entries, not `dotnet tool -g`: `dotnet-ef` held to `10`, `roslyn-language-server` with `prerelease = true` (it ships prereleases only). mise has no `--ignore-failed-sources`, so `upd-pkg` runs `mise upgrade` from `~`: inside the work repos their `NuGet.config` clears sources and maps `*` to the corporate feed, so nuget.org tools fail there; installed tools keep working.
 - **npm globals** are `npm:` entries (`confluence-cli`), not `npm -g`.
 
 - **Secrets** live next to it in `~/.config/mise/config.local.toml` (`[env]`, `chmod 600`, not mirrored): the ADO PAT (written by [`set-ado-pat`](#functions)), the Confluence PAT, and dev client secrets. mise merges it over `config.toml`, so they reach every shell, `fish -c` and agent. Create it by hand on a new machine.
@@ -167,7 +167,7 @@ Reload a running instance with `cmd+shift+,`. Validate edits with `ghostty +vali
 
 [Fish shell](https://fishshell.com) config. Mirror of `~/.config/fish/` (excludes `fish_variables`, history, and auto-generated completions).
 
-The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` launches `claude --permission-mode auto` (classifier-gated, not skip-all), `co` is the yolo launcher for `copilot`; the bare commands stay stock. `mr` is `mise run`. Secrets live in the machine-local [`~/.config/mise/config.local.toml`](#miseglobaltoml), never in `config.fish`.
+The `club2` and `abha` ssh aliases in the live `config.fish` are host-specific and deliberately not mirrored. `ca` launches `claude --permission-mode auto` (classifier-gated, not skip-all), `co` launches `copilot --assisted-approval` (safety-judge-gated, the Copilot counterpart of auto mode); the bare commands stay stock. `mr` is `mise run`. Secrets live in the machine-local [`~/.config/mise/config.local.toml`](#miseglobaltoml), never in `config.fish`.
 
 ### `config.fish`
 
